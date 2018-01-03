@@ -1,9 +1,12 @@
 //Developpeur: Ander Jimenez Garcia
 //Date: 09/12/2017
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include "Indexeur_Image.h"
 
-#include "Indexeur_Image_Alpha3.h"
 int bits_quant = 3;
-
 /*
 Cette fonction retourne la valeur quantifiée en fonction de la valeur brute en entrée, de la composante de couleur (R, G ou B)
 et du nombre de bits de quantification (variable globale dans la bibliotheque de l'analyseur .config.
@@ -106,37 +109,20 @@ type_desc_img indexeur_img(char chemin[])
 				for(cpt_col=0;cpt_col<taille_col;cpt_col++)
 				{
 					fscanf(ptr_file, "%d ", &val_brute); //Lecture de la valeur du pixel
-					if(nb_composantes == 1)
-						matrice_RGB[cpt_lig][cpt_col]= val_brute; //On stocke dans une matrice la valeur du pixel
-					else
-						matrice_RGB[cpt_lig][cpt_col]= matrice_RGB[cpt_lig][cpt_col] + quantificateur(val_brute, nb_mat); //On somme les valeurs quantifies des valeurs R G et B du meme pixel
+					matrice_RGB[cpt_lig][cpt_col]= matrice_RGB[cpt_lig][cpt_col] + quantificateur(val_brute, nb_mat); //On somme les valeurs quantifies des valeurs R G et B du meme pixel
 				}
 			}
 		}
 		
-		if(nb_composantes == 1)
-			return(histogramme(matrice_RGB, taille_lig, taille_col, 256, chemin));
-		else
-			return(histogramme(matrice_RGB, taille_lig, taille_col, tab_valmax[bits_quant-1],chemin));
+		type_desc_img d;
+		
+			d=histogramme(matrice_RGB, taille_lig, taille_col, tab_valmax[bits_quant-1],chemin);
+			d.nb_comp=nb_composantes;
+		
+		return d;
 	}
 	else
 	{
 		fprintf(stderr, "ERREUR! Ouverture du fichier temporaire echoué!");
-	}
-}
-
-void main()
-{
-	type_desc_img d;
-	int i;
-	char chemin[100];
-	int tab_valmax[5]={8,64,512,4096,32768};
-	printf("Saissisez le chemin du fichier .txt de l'image à indexer: \n");
-	scanf("%s", chemin);
-	d = indexeur_img(chemin);
-	printf("Nb ID = %s\n", d.nb_ID);
-	for(i=0;i<tab_valmax[bits_quant-1];i++)
-	{
-		printf("Valeur %d : %d\n", i, d.tab[i]);
 	}
 }
