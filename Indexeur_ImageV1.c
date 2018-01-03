@@ -1,7 +1,7 @@
 //Developpeur: Ander Jimenez Garcia
 //Date: 09/12/2017
 
-#include "Indexeur_Image_Alpha3.h"
+#include "Indexeur_ImageV1.h"
 int bits_quant = 3;
 
 /*
