@@ -16,9 +16,9 @@ float compare_img(type_desc_img d1, type_desc_img d2)
 	}
 	else
 	{
-		int i, tab_valmax[5]={8,64,511,4096,32768}, val_max=0;
-		float distance = 0;
-		for(i=0;i<tab_valmax[bits_quant];i++)
+		int i=0, tab_valmax[5]={8,64,511,4096,32768};
+		float distance = 0, val_max=0;
+		for(i=0;i<tab_valmax[bits_quant-1];i++)
 		{
 			distance = distance + abs((d1.tab[i] - d2.tab[i]));
 			val_max= val_max + d1.tab[i] + d2.tab[i];

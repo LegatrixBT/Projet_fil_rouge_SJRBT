@@ -4,9 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+
 #include "Indexeur_Image.h"
 
-int bits_quant = 3;
+int bits_quant = 2;
 /*
 Cette fonction retourne la valeur quantifiée en fonction de la valeur brute en entrée, de la composante de couleur (R, G ou B)
 et du nombre de bits de quantification (variable globale dans la bibliotheque de l'analyseur .config.
@@ -123,6 +124,6 @@ type_desc_img indexeur_img(char chemin[])
 	}
 	else
 	{
-		fprintf(stderr, "ERREUR! Ouverture du fichier temporaire echoué!");
+		fprintf(stderr, "ERREUR! Fichier introuvable!\n");
 	}
 }
