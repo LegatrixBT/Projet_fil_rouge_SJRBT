@@ -8,6 +8,4 @@
 
 #endif
 
-extern int bits_quant;
-
-float compare_img(type_desc_img d1, type_desc_img d2);
+float compare_img(type_desc_img d1, type_desc_img d2,int bits_quant);

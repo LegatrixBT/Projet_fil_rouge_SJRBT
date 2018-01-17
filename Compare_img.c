@@ -6,7 +6,7 @@
 #include <string.h>
 #include "Compare_img.h"
 
-float compare_img(type_desc_img d1, type_desc_img d2)
+float compare_img(type_desc_img d1, type_desc_img d2, int bits_quant)
 {
 	
 	if(d1.nb_comp != d2.nb_comp)

@@ -17,15 +17,18 @@
 	#include "fonctions_descripteur_texte.h"
 #endif
 
-int affichage_menu()
+int bits_quant = 2;
+
+char affichage_menu()
 {
-	int choix;
+	char choix;
 	printf("\n/********************Moteur de recherche texte/image********************/\n");
 	printf("Que voulez-vous rechercher?\n");
 	printf("	(1) Image\n");
 	printf("	(2) Texte\n");
 	printf("Saissisez l'option desirée :");
-	scanf("%d", &choix);
+	scanf("%1s",&choix);
+	
 	return(choix);
 }
 
@@ -49,7 +52,7 @@ int getChemin_img(char ID_a_trouver[],char chemin_trouve[]){
 void main(){
 	int choix_menu;
 	char chemin_rech[50],commande[50], ID_rech[20], commande_ouvrir_img[50];
-	FILE * ptr_rech_ID, * ptr_liste_index;
+	FILE * ptr_rech_ID, * ptr_liste_index, * ptr_db;
 	pile_img p;
 	pile_texte p1;
 	init_pile_img(&p);
@@ -58,22 +61,36 @@ void main(){
 	
 	//Indexation images
 	
-	printf("Indexation des images en cours...\n");
-	system("ls IMG_RGB/*.txt > fic_temp");
-	system("ls IMG_NB/*.txt >> fic_temp");
-	ptr_liste_index=fopen("fic_temp", "r");
-	while(!feof(ptr_liste_index)) {
-		fscanf(ptr_liste_index,"%s\n",chemin_rech);
-		empiler_img(&p,indexeur_img(chemin_rech));
+	ptr_db=fopen("base_descripteur_image","r");
+	if(ptr_db == NULL)
+	{
+		printf("Indexation des images en cours...\n");
+		system("ls IMG_RGB/*.txt > fic_temp");
+		system("ls IMG_NB/*.txt >> fic_temp");
+		ptr_liste_index=fopen("fic_temp", "r");
+		while(!feof(ptr_liste_index)) {
+			fscanf(ptr_liste_index,"%s\n",chemin_rech);
+			empiler_img(&p,indexeur_img(chemin_rech, bits_quant));
+		}
+		fclose(ptr_liste_index);
+		system("rm fic_temp");
+		ecrire_db_img(p);
+		printf("Indexation et génération de base de descripteurs image finalisée!\n\n");
 	}
-	fclose(ptr_liste_index);
-	system("rm fic_temp");
-	ecrire_db_img(p);
-	printf("Indexation et génération de base de descripteurs image finalisée!\n\n");
+	else
+		fclose(ptr_db);
+	ptr_db=fopen("liste_base_image","r");
+	if(ptr_db == NULL)
+	{
+		system("ls -i IMG_RGB/*.txt > liste_base_image");
+		system("ls -i IMG_NB/*.txt >> liste_base_image");
+	}
+	else
+		fclose(ptr_db);
 	
 	//Indexation Textes
 	
-	init_pile_texte(&p1);
+	/*init_pile_texte(&p1);
 	printf("Indexation des textes en cours...\n");
 	system("ls Textes/*.xml > fic_temp");
 	ptr_liste_index=fopen("fic_temp", "r");
@@ -88,7 +105,7 @@ void main(){
 	fclose(ptr_liste_index);
 	system("rm fic_temp");
 	ecrire_db_texte(p1);
-	printf("Indexation et génération de base de descripteurs texte finalisée!\n\n");
+	printf("Indexation et génération de base de descripteurs texte finalisée!\n\n");*/
 	
 	//Recherche
 	
@@ -96,21 +113,23 @@ void main(){
 		choix_menu=affichage_menu();
 		switch(choix_menu)
 		{
-			case 1:
+			case '1':
 			{
+				chemin_rech[0]=0;
 				printf("Saissisez le chemin : ");
 				scanf("%s", chemin_rech);
 				strcpy(commande,"more liste_base_image | grep '");
 				strcat(commande,chemin_rech);
-				strcat(commande,".txt'");
-				ptr_rech_ID=popen(commande,"r");
-				fscanf(ptr_rech_ID,"%s %*s\n", ID_rech);
+				strcat(commande,"' > fic_grep");
+				system(commande);
+				ptr_rech_ID=fopen("fic_grep","r");
+				int test_lecture=fscanf(ptr_rech_ID,"%s", ID_rech);
 				fclose(ptr_rech_ID);
-				if(strcmp(ID_rech,"")==0)
+				if(test_lecture==-1)
 					printf("ERREUR! ID introuvable!\n");
 				else
 				{
-					p=lire_db_img();
+					p=lire_db_img(bits_quant);
 					while(pile_est_vide_img(p) == 0)
 					{
 						drech=depiler_img(&p);
@@ -123,7 +142,7 @@ void main(){
 					{
 						
 						init_pile_img(&p);
-						p=lire_db_img();
+						p=lire_db_img(bits_quant);
 						FILE * ptr_res_cmp;
 						char chemin_aux[50];
 						ptr_res_cmp=fopen("liste_cmp","w");
@@ -132,8 +151,8 @@ void main(){
 							daux=depiler_img(&p);
 							if((strcmp(daux.nb_ID,drech.nb_ID)!=0)&&(daux.nb_comp == drech.nb_comp))
 							{
-								distance=compare_img(drech,daux);
-								if(distance > 50)
+								distance=compare_img(drech,daux,bits_quant);
+								if(distance > 0)
 								{
 									getChemin_img(daux.nb_ID,chemin_aux);
 									fprintf(ptr_res_cmp,"%s %2.2f\n",chemin_aux,distance);
@@ -142,7 +161,7 @@ void main(){
 						}
 						fclose(ptr_res_cmp);
 						system("sort liste_cmp -n -k 2 -r | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
-						system("rm liste_cmp");
+						//system("rm liste_cmp");
 						system("more liste_res");
 						
 						FILE * ptr_fic_ouvrir;
@@ -166,12 +185,12 @@ void main(){
 						else
 							strcat(commande_ouvrir_img, ".jpg");
 						system(commande_ouvrir_img);
-						system("rm fic_a_ouvrir liste_res");
+						//system("rm fic_a_ouvrir liste_res");
 					}
 				}
 				break;
 			}
-			case 2:
+			case '2':
 				printf("Non implémenté\n");
 				break;
 			default:

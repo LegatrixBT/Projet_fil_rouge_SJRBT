@@ -7,13 +7,12 @@
 
 #include "Indexeur_Image.h"
 
-int bits_quant = 2;
 /*
 Cette fonction retourne la valeur quantifiée en fonction de la valeur brute en entrée, de la composante de couleur (R, G ou B)
 et du nombre de bits de quantification (variable globale dans la bibliotheque de l'analyseur .config.
 */
 
-int quantificateur(int val, int nb_matrice_composante) 
+int quantificateur(int val, int nb_matrice_composante, int bits_quant) 
 {
 	if(((val>=0)&&(val<256))&&(nb_matrice_composante>=0)&&(nb_matrice_composante<3)) //On verifie que val est entre 0 et 255, nb_matrice_composante entre 0 et 2
 	{
@@ -85,7 +84,7 @@ Cette fonction retourne le descripteur du fichier dans chemin.
 Le descripteur est fonction du nombre de bits de quantifications saisi dans le fichier .config
 */
 
-type_desc_img indexeur_img(char chemin[])
+type_desc_img indexeur_img(char chemin[], int bits_quant)
 {
 	FILE * ptr_file;
 
@@ -110,11 +109,10 @@ type_desc_img indexeur_img(char chemin[])
 				for(cpt_col=0;cpt_col<taille_col;cpt_col++)
 				{
 					fscanf(ptr_file, "%d ", &val_brute); //Lecture de la valeur du pixel
-					matrice_RGB[cpt_lig][cpt_col]= matrice_RGB[cpt_lig][cpt_col] + quantificateur(val_brute, nb_mat); //On somme les valeurs quantifies des valeurs R G et B du meme pixel
+					matrice_RGB[cpt_lig][cpt_col]= matrice_RGB[cpt_lig][cpt_col] + quantificateur(val_brute, nb_mat, bits_quant); //On somme les valeurs quantifies des valeurs R G et B du meme pixel
 				}
 			}
 		}
-		
 		type_desc_img d;
 		
 			d=histogramme(matrice_RGB, taille_lig, taille_col, tab_valmax[bits_quant-1],chemin);

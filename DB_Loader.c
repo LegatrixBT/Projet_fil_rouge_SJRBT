@@ -133,8 +133,7 @@ void ecrire_db_img(pile_img p)
 			fprintf(ptr_fic,"ID=%s nb_comp=%d\n", desc_aux.nb_ID, desc_aux.nb_comp);
 			for(i=0;i<tab_valmax[bits_quant-1];i++)
 			{
-				if(desc_aux.tab[i] != 0)
-					fprintf(ptr_fic,"%d %d\n", i, desc_aux.tab[i]);
+				fprintf(ptr_fic,"%d %d\n", i, desc_aux.tab[i]);
 			}
 			fprintf(ptr_fic,"%d %d\n", -1, -1);
 		}
@@ -190,8 +189,7 @@ void ecrire_db_texte(pile_texte p)
 			fprintf(ptr_fic,"ID=%s nbr_mot_texte=%d\n", desc_aux.nb_ID, desc_aux.nbr_mot_texte);
 			for(i=0;i<10;i++)
 			{
-				if(desc_aux.occurence[i] != 0)
-					fprintf(ptr_fic,"%s %d\n",desc_aux.mot[i], desc_aux.occurence[i]);
+				fprintf(ptr_fic,"%s %d\n",desc_aux.mot[i], desc_aux.occurence[i]);
 			}
 			fprintf(ptr_fic,"%s %d\n", "-1", -1);
 		}

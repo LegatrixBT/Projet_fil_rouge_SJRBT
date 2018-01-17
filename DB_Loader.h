@@ -36,7 +36,7 @@ type_desc_img depiler_img(pile_img * ptr_pile);
 int pile_est_vide_img(pile_img p);
 
 void ecrire_db_img(pile_img p);
-pile_img lire_db_img(void);
+pile_img lire_db_img();
 
 //Partie texte
 
