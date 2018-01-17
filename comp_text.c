@@ -1,4 +1,3 @@
-#include "fonctions_descripteur_texte.h"
 #include "comp_text.h"
 
 float compare_Text_fichier(type_desc_text desc1, type_desc_text desc2)
