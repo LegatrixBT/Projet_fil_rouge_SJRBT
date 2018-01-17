@@ -1,6 +1,6 @@
 #include "comp_text.h"
 
-float compare_Text_fichier(type_desc_text desc1, type_desc_text desc2)
+float compare_Text_fichier(type_desc_texte desc1, type_desc_texte desc2)
 {
 	/* Cette fonction compare les deux descripteurs en entree et retourne leur distance en pourcentage
 	100% = Fichiers descripteurs 
@@ -68,12 +68,12 @@ float compare_Text_fichier(type_desc_text desc1, type_desc_text desc2)
 	for(i = 0; i < 10; i++)
 	{
 		dist_ret += tab_dist[i];
-		printf("distance mot %s :  %f\n",desc1.mot[i],tab_dist[i]);
+		//printf("distance mot %s :  %f\n",desc1.mot[i],tab_dist[i]);
 	}
 	return(dist_ret*10);
 }
 
-float compare_Texmot(char mot[], type_desc_text desc)
+float compare_Texmot(char mot[], type_desc_texte desc)
 {
 	int i, trouve = 0 ;
 	float distance;

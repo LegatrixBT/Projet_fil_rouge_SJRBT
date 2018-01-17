@@ -223,7 +223,6 @@ pile_texte lire_db_texte(void)
 					i++;
 				}
 			}while(val_tab != -1);
-			printf("%s\n",desc_aux.mot[2]);
 			empiler_texte(&p_aux,desc_aux);
 		}while(!feof(ptr_fic));
 		fclose(ptr_fic);
@@ -231,7 +230,7 @@ pile_texte lire_db_texte(void)
 	}
 	else
 	{
-		fprintf(stderr,"ERREUR dans lecture db image! base de descripteurs introuvable!");
+		fprintf(stderr,"ERREUR dans lecture db texte! base de descripteurs introuvable!");
 	}
 	
 }

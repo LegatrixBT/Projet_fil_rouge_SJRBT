@@ -23,5 +23,8 @@ test_compare.out : test_compare.c Compare_img.o Indexeur_Image.o
 fonctions_descripteur_texte.o : fonctions_descripteur_texte.c fonctions_descripteur_texte.h
 	gcc -c fonctions_descripteur_texte.c
 	
-recherche.out : Logiciel_final.c DB_Loader.o Indexeur_Image.o Compare_img.o fonctions_descripteur_texte.o
-	gcc Logiciel_final.c -o recherche.out Indexeur_Image.o DB_Loader.o Compare_img.o fonctions_descripteur_texte.o
+comp_text.o : comp_text.h comp_text.c fonctions_descripteur_texte.h fonctions_descripteur_texte.c
+	gcc -c comp_text.c
+	
+recherche.out : Logiciel_final.c DB_Loader.o Indexeur_Image.o Compare_img.o fonctions_descripteur_texte.o comp_text.o
+	gcc Logiciel_final.c -o recherche.out Indexeur_Image.o DB_Loader.o Compare_img.o comp_text.o fonctions_descripteur_texte.o -Wall -fstack-protector
