@@ -31,7 +31,27 @@ int affichage_menu()
 	printf("	(2) Texte\n");
 	printf("Saissisez l'option desirée :");
 	scanf("%d",&choix);
-	
+	if(choix == 2)
+	{
+		printf("\nQue voulez-vous rechercher dans un texte?\n");
+		printf("	(1) Fichier texte\n");
+		printf("	(2) mot-clé\n");
+		printf("Saissisez l'option desirée : ");
+		scanf("%d",&choix);
+		if(choix == 1)
+			choix = 2;
+		else{
+			if(choix == 2)
+				choix = 3;
+			else
+				choix = 0;
+		}
+	}
+	else
+	{
+		if(choix != 1)
+			choix = 0;
+	}
 	return(choix);
 }
 
@@ -61,7 +81,12 @@ int getChemin_img(char ID_a_trouver[],char chemin_trouve[]){
 	if(strcmp(ID_a_trouver,"")==0)
 		return 0;
 	else
+	{
+		int i,longeur = strlen(chemin_trouve);
+		for(i = longeur - 1;i > longeur - 5;i--)
+			chemin_trouve[i]=0;
 		return 1;
+	}
 }
 
 int getChemin_texte(char ID_a_trouver[],char chemin_trouve[]){
@@ -82,7 +107,7 @@ int getChemin_texte(char ID_a_trouver[],char chemin_trouve[]){
 }
 
 void recherche_image(){
-	char chemin_rech[50],commande[50], ID_rech[20];
+	char chemin_rech[50],commande[50], ID_rech[20],chemin_aff[50];
 	FILE * ptr_rech_ID;
 	type_desc_img daux,drech;
 	float distance;
@@ -95,12 +120,13 @@ void recherche_image(){
 	strcat(commande,"' > fic_temp");
 	system(commande);
 	ptr_rech_ID=fopen("fic_temp","r");
-	int test_lecture=fscanf(ptr_rech_ID,"%s", ID_rech);
+	int test_lecture=fscanf(ptr_rech_ID,"%s %s", ID_rech, chemin_aff);
 	fclose(ptr_rech_ID);
 	if(test_lecture==-1)
 		printf("ERREUR! ID introuvable!\n");
 	else
 	{
+		printf("Recherche du fichier %s lancée...\n", chemin_aff);
 		p=lire_db_img(bits_quant);
 		while(pile_est_vide_img(p) == 0)
 		{
@@ -148,10 +174,6 @@ void recherche_image(){
 			
 			getChemin_img(ID_chemin_img_ouvrir,chemin_img_ouvrir);
 			
-			int i,longeur = strlen(chemin_img_ouvrir);
-			for(i = longeur - 1;i > longeur - 5;i--)
-				chemin_img_ouvrir[i]=0;
-			
 			strcpy(commande,"eog ");
 			strcat(commande,chemin_img_ouvrir);
 			
@@ -169,7 +191,7 @@ void recherche_image(){
 }
 
 void recherche_texte_fic(){
-	char chemin_rech[50], ID_rech[20],commande[50];
+	char chemin_rech[50], ID_rech[20],commande[50],chemin_aff[50];
 	FILE * ptr_rech_ID;
 	pile_texte p;
 	type_desc_texte drech, daux;
@@ -180,12 +202,13 @@ void recherche_texte_fic(){
 	strcat(commande,"' > fic_temp");
 	system(commande);
 	ptr_rech_ID=fopen("fic_temp","r");
-	int test_lecture=fscanf(ptr_rech_ID,"%s", ID_rech);
+	int test_lecture=fscanf(ptr_rech_ID,"%s %s", ID_rech,chemin_aff);
 	fclose(ptr_rech_ID);
 	if(test_lecture == -1)
 		fprintf(stderr, "ERREUR! ID introuvable!\n");
 	else
 	{
+		printf("Recherche du fichier %s lancée...\n", chemin_aff);
 		init_pile_texte(&p);
 		p=lire_db_texte();
 		while(pile_est_vide_texte(p) == 0)
@@ -228,6 +251,36 @@ void recherche_texte_fic(){
 			system("rm liste_res");
 		}
 	}
+}
+
+void recherche_motcle(){
+	char mot_cle[25];
+	printf("Saissisez le mot-clé à rechercher: ");
+	scanf("%s", mot_cle);
+	
+	pile_texte p;
+	type_desc_texte daux;
+	float distance;
+	FILE * ptr_res_cmp;
+	char chemin_rech[50];
+	
+	ptr_res_cmp=fopen("liste_cmp","w");
+	p=lire_db_texte();
+	while(pile_est_vide_texte(p) == 0)
+	{
+		daux = depiler_texte(&p);
+		distance=compare_Texmot(mot_cle,daux);
+		getChemin_texte(daux.nb_ID,chemin_rech);
+		if(distance != 0)
+			fprintf(ptr_res_cmp,"%s %2.2f\n",chemin_rech,distance);
+	}
+	fclose(ptr_res_cmp);
+	system("sort liste_cmp -n -k 2 -r | head -n 5 > liste_res"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
+	system("rm liste_cmp");
+	printf("\nResultats de la comparaison:\n");
+	system("more liste_res");
+	
+	system("rm liste_res");
 }
 
 void main(){
@@ -311,6 +364,11 @@ void main(){
 			case 2:
 			{
 				recherche_texte_fic();
+				break;
+			}
+			case 3:
+			{
+				recherche_motcle();
 				break;
 			}
 			default:

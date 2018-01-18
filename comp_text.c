@@ -76,7 +76,7 @@ float compare_Text_fichier(type_desc_texte desc1, type_desc_texte desc2)
 float compare_Texmot(char mot[], type_desc_texte desc)
 {
 	int i, trouve = 0 ;
-	float distance;
+	float distance=0;
 	
 	for(i = 0; (i < 10)&&(trouve==0); i++)
 	{
