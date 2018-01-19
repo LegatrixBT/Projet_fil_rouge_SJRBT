@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "DB_Loader.h"
 #include "Compare_img.h"
@@ -22,6 +23,12 @@
 
 int bits_quant = 2;
 
+void flush()   //flush du flux
+{
+    int c = 0;
+    while ((c = getchar()) != '\n' /*&& c != EOF*/); 
+}
+
 int affichage_menu()
 {
 	int choix;
@@ -31,6 +38,8 @@ int affichage_menu()
 	printf("	(2) Texte\n");
 	printf("Saissisez l'option desirée :");
 	scanf("%d",&choix);
+	flush(); // pas le plus propre mais efficace pour eviter de partir dans les choux avant vrai interface textuelle
+	
 	if(choix == 2)
 	{
 		printf("\nQue voulez-vous rechercher dans un texte?\n");
@@ -52,6 +61,7 @@ int affichage_menu()
 		if(choix != 1)
 			choix = 0;
 	}
+	
 	return(choix);
 }
 
@@ -258,6 +268,12 @@ void recherche_motcle(){
 	printf("Saissisez le mot-clé à rechercher: ");
 	scanf("%s", mot_cle);
 	
+	//formatage du mot_cle
+	for (int i=0; i<strlen(mot_cle); i++) { // on met le mot en minuscule
+		mot_cle[i]=tolower(mot_cle[i]);
+	}
+	// il manque a traiter le cas des accents
+
 	pile_texte p;
 	type_desc_texte daux;
 	float distance;
