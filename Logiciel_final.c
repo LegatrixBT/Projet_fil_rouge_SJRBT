@@ -275,14 +275,23 @@ void recherche_texte_fic(){
 
 void recherche_motcle(){
 	char mot_cle[25];
+	FILE * pc;
+	char commande1[50]="echo ";
+	
 	printf("Saissisez le mot-clé à rechercher: ");
 	scanf("%s", mot_cle);
+	// formatage du mot_cle
+	strcat(commande1,mot_cle);
+	strcat(commande1,"> mot_temp ");
+	system(commande1);
+	pc = popen("cat mot_temp | iconv -f  UTF-8 -t ascii//TRANSLIT","r");		//ouverture du pipe pour lancer la commande et récupérer le retour de la commande
+		fscanf(pc, "%s",mot_cle); 	// Lecture du mot formate
+	pclose(pc);
+	system("rm mot_temp");
 	
-	//formatage du mot_cle
 	for (int i=0; i<strlen(mot_cle); i++) { // on met le mot en minuscule
 		mot_cle[i]=tolower(mot_cle[i]);
 	}
-	// il manque a traiter le cas des accents
 
 	pile_texte p;
 	type_desc_texte daux;
