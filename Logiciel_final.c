@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "DB_Loader.h"
 #include "Compare_img.h"
@@ -22,6 +23,12 @@
 
 int bits_quant = 2;
 
+void flush()   //flush du flux
+{
+    int c = 0;
+    while ((c = getchar()) != '\n' /*&& c != EOF*/); 
+}
+
 int affichage_menu()
 {
 	int choix;
@@ -31,13 +38,17 @@ int affichage_menu()
 	printf("	(2) Texte\n");
 	printf("Saissisez l'option desirée :");
 	scanf("%d",&choix);
+	flush(); // pas le plus propre mais efficace pour eviter de partir dans les choux avant vrai interface textuelle
+	
 	if(choix == 2)
 	{
+		choix=0;
 		printf("\nQue voulez-vous rechercher dans un texte?\n");
 		printf("	(1) Fichier texte\n");
 		printf("	(2) mot-clé\n");
 		printf("Saissisez l'option desirée : ");
 		scanf("%d",&choix);
+		flush();
 		if(choix == 1)
 			choix = 2;
 		else{
@@ -52,6 +63,7 @@ int affichage_menu()
 		if(choix != 1)
 			choix = 0;
 	}
+	
 	return(choix);
 }
 
@@ -120,11 +132,13 @@ void recherche_image(){
 	strcat(commande,"' > fic_temp");
 	system(commande);
 	ptr_rech_ID=fopen("fic_temp","r");
+	int test_lecture=fscanf(ptr_rech_ID,"%s %s", ID_rech, chemin_aff);
 	fclose(ptr_rech_ID);
 	if(test_lecture==-1)
 		printf("ERREUR! ID introuvable!\n");
 	else
 	{
+		printf("Recherche du fichier %s lancée...\n", chemin_aff);
 		p=lire_db_img(bits_quant);
 		while(pile_est_vide_img(p) == 0)
 		{
@@ -222,9 +236,9 @@ void recherche_texte_fic(){
 			
 			init_pile_texte(&p);
 			p=lire_db_texte();
-			FILE * ptr_res_cmp;
+			FILE * ptr_res_cmp, * ptr_fic_ouvrir;
 			float distance;
-			char chemin_aux[50];
+			char chemin_aux[50],chemin_fic_ouvrir[50];
 			
 			ptr_res_cmp=fopen("liste_cmp","w");
 			while(pile_est_vide_texte(p) == 0)
@@ -241,12 +255,20 @@ void recherche_texte_fic(){
 				}
 			}
 			fclose(ptr_res_cmp);
-			system("sort liste_cmp -n -k 2 | head -n 5 > liste_res"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
+			system("sort liste_cmp -n -k 2 | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
 			system("rm liste_cmp");
 			printf("\nResultats de la comparaison:\n");
-			system("more liste_res");
-			
+			system("more liste_res");			
 			system("rm liste_res");
+			
+			printf("Ouverture du fichier le plus ressemblant...\n");
+			ptr_fic_ouvrir=popen("more fic_a_ouvrir","r");
+			fscanf(ptr_fic_ouvrir,"%s %*s\n",chemin_fic_ouvrir);
+			fclose(ptr_fic_ouvrir);
+			strcpy(commande,"gedit ");
+			strcat(commande,chemin_fic_ouvrir);
+			system(commande);
+			system("rm fic_a_ouvrir");
 		}
 	}
 }
@@ -256,11 +278,18 @@ void recherche_motcle(){
 	printf("Saissisez le mot-clé à rechercher: ");
 	scanf("%s", mot_cle);
 	
+	//formatage du mot_cle
+	for (int i=0; i<strlen(mot_cle); i++) { // on met le mot en minuscule
+		mot_cle[i]=tolower(mot_cle[i]);
+	}
+	// il manque a traiter le cas des accents
+
 	pile_texte p;
 	type_desc_texte daux;
 	float distance;
-	FILE * ptr_res_cmp;
-	char chemin_rech[50];
+	FILE * ptr_res_cmp,* ptr_fic_ouvrir;
+	char chemin_rech[50],chemin_fic_ouvrir[50],commande[50];
+	int resultat_existant=0;
 	
 	ptr_res_cmp=fopen("liste_cmp","w");
 	p=lire_db_texte();
@@ -270,15 +299,32 @@ void recherche_motcle(){
 		distance=compare_Texmot(mot_cle,daux);
 		getChemin_texte(daux.nb_ID,chemin_rech);
 		if(distance != 0)
+		{
 			fprintf(ptr_res_cmp,"%s %2.2f\n",chemin_rech,distance);
+			resultat_existant=1;
+		}
 	}
 	fclose(ptr_res_cmp);
-	system("sort liste_cmp -n -k 2 -r | head -n 5 > liste_res"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
+	system("sort liste_cmp -n -k 2 -r | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
 	system("rm liste_cmp");
-	printf("\nResultats de la comparaison:\n");
-	system("more liste_res");
 	
-	system("rm liste_res");
+	if(resultat_existant==1){
+		printf("\nResultats de la comparaison:\n");
+		system("more liste_res");
+		system("rm liste_res");
+		printf("Ouverture du fichier le plus ressemblant...\n");
+		ptr_fic_ouvrir=popen("more fic_a_ouvrir","r");
+		fscanf(ptr_fic_ouvrir,"%s %*s\n",chemin_fic_ouvrir);
+		fclose(ptr_fic_ouvrir);
+		strcpy(commande,"gedit ");
+		strcat(commande,chemin_fic_ouvrir);
+		system(commande);
+		system("rm fic_a_ouvrir");
+	}
+	else
+	{
+		printf("Aucune résultat trouvé...\n");
+	}
 }
 
 void main(){
@@ -351,28 +397,32 @@ void main(){
 	
 	
 	do{
+		system("clear");
 		choix_menu=affichage_menu();
 		switch(choix_menu)
 		{
 			case 1:
 			{
 				recherche_image();
+				choix_quitter=affichage_fin();
 				break;
 			}
 			case 2:
 			{
 				recherche_texte_fic();
+				choix_quitter=affichage_fin();
 				break;
 			}
 			case 3:
 			{
 				recherche_motcle();
+				choix_quitter=affichage_fin();
 				break;
 			}
 			default:
 				printf("Choix invalide!\n");
 				break;
 		}
-		choix_quitter=affichage_fin();
 	}while(choix_quitter != 2);
+	system("clear");
 }
