@@ -120,13 +120,11 @@ void recherche_image(){
 	strcat(commande,"' > fic_temp");
 	system(commande);
 	ptr_rech_ID=fopen("fic_temp","r");
-	int test_lecture=fscanf(ptr_rech_ID,"%s %s", ID_rech, chemin_aff);
 	fclose(ptr_rech_ID);
 	if(test_lecture==-1)
 		printf("ERREUR! ID introuvable!\n");
 	else
 	{
-		printf("Recherche du fichier %s lancée...\n", chemin_aff);
 		p=lire_db_img(bits_quant);
 		while(pile_est_vide_img(p) == 0)
 		{
