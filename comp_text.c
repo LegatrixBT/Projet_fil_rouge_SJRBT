@@ -68,15 +68,17 @@ float compare_Text_fichier(type_desc_texte desc1, type_desc_texte desc2)
 	for(i = 0; i < 10; i++)
 	{
 		dist_ret += tab_dist[i];
-		//printf("distance mot %s :  %f\n",desc1.mot[i],tab_dist[i]);
 	}
 	return(dist_ret*10);
 }
 
 float compare_Texmot(char mot[], type_desc_texte desc)
 {
-	int i, trouve = 0 ;
-	float distance=0;
+	/*Effectue la recherche d'un mot dans un descripteur de texte.
+	Retour : pourcentage d'apparition de ce mot dans le texte*/
+	int i, trouve = 0 ; // i est compteur pour la boucle for() // trouve permet de sortir de la boucle for plus rapidement
+	// on trouve le mot a comparer en debut du descripteur.
+	float distance=0; // la distance est en fait le pourcentage d'apparition du mot dans le texte au format 0.00 
 	
 	for(i = 0; (i < 10)&&(trouve==0); i++)
 	{

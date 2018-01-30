@@ -20,8 +20,6 @@
 
 //Partie Image
 
-extern int bits_quant;
-
 typedef struct cellule_img //Structure cellule
 {
 	type_desc_img elt; //Element de la pile
@@ -35,7 +33,7 @@ void empiler_img(pile_img * ptr_pile, type_desc_img d);
 type_desc_img depiler_img(pile_img * ptr_pile);
 int pile_est_vide_img(pile_img p);
 
-void ecrire_db_img(pile_img p);
+void ecrire_db_img(pile_img p, int bits_quant);
 pile_img lire_db_img();
 
 //Partie texte

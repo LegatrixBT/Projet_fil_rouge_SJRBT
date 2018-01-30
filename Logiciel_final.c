@@ -4,6 +4,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "action_config.h"
+
 #include "DB_Loader.h"
 #include "Compare_img.h"
 
@@ -20,8 +22,6 @@
 	#define FONCTION_DESCRIPTEUR_TEXTE_H
 	#include "fonctions_descripteur_texte.h"
 #endif
-
-int bits_quant = 2;
 
 void flush()   //flush du flux
 {
@@ -118,7 +118,7 @@ int getChemin_texte(char ID_a_trouver[],char chemin_trouve[]){
 		return 1;
 }
 
-void recherche_image(){
+void recherche_image(int bits_quant){
 	char chemin_rech[50],commande[50], ID_rech[20],chemin_aff[50];
 	FILE * ptr_rech_ID;
 	type_desc_img daux,drech;
@@ -172,7 +172,7 @@ void recherche_image(){
 			}
 			fclose(ptr_res_cmp);
 			
-			system("sort liste_cmp -n -k 2 | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
+			system("sort liste_cmp -n -k 3 -r | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
 			system("rm liste_cmp");
 			printf("\nResultats de la comparaison:\n");
 			system("more liste_res");
@@ -197,7 +197,7 @@ void recherche_image(){
 			printf("\nOuverture de l'image la plus ressemblante...\n");
 			
 			system(commande);
-			system("rm fic_a_ouvrir liste_res");
+			system("rm fic_a_ouvrir liste_res fic_temp");
 		}
 	}
 }
@@ -255,7 +255,7 @@ void recherche_texte_fic(){
 				}
 			}
 			fclose(ptr_res_cmp);
-			system("sort liste_cmp -n -k 2 | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
+			system("sort liste_cmp -n -k 3 | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
 			system("rm liste_cmp");
 			printf("\nResultats de la comparaison:\n");
 			system("more liste_res");			
@@ -268,7 +268,7 @@ void recherche_texte_fic(){
 			strcpy(commande,"gedit ");
 			strcat(commande,chemin_fic_ouvrir);
 			system(commande);
-			system("rm fic_a_ouvrir");
+			system("rm fic_a_ouvrir fic_temp");
 		}
 	}
 }
@@ -277,6 +277,7 @@ void recherche_motcle(){
 	char mot_cle[25];
 	FILE * pc;
 	char commande1[50]="echo ";
+	int i ;
 	
 	printf("Saissisez le mot-clé à rechercher: ");
 	scanf("%s", mot_cle);
@@ -289,7 +290,7 @@ void recherche_motcle(){
 	pclose(pc);
 	system("rm mot_temp");
 	
-	for (int i=0; i<strlen(mot_cle); i++) { // on met le mot en minuscule
+	for (i=0; i<strlen(mot_cle); i++) { // on met le mot en minuscule
 		mot_cle[i]=tolower(mot_cle[i]);
 	}
 
@@ -314,7 +315,7 @@ void recherche_motcle(){
 		}
 	}
 	fclose(ptr_res_cmp);
-	system("sort liste_cmp -n -k 2 -r | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
+	system("sort liste_cmp -n -k 3 -r | head -n 5 | tee liste_res | head -n 1 > fic_a_ouvrir"); //On ne garde que les 5 premiers resultats dans liste_res, et on garde que le premier dans fic_a_ouvrir
 	system("rm liste_cmp");
 	
 	if(resultat_existant==1){
@@ -347,6 +348,11 @@ void main(){
 	
 	char chemin_index[50];
 	
+	type_config config;
+	
+	//Lecture fichier configuration
+	lecture_config(&config);
+	
 	//Indexation images
 	
 	ptr_db=fopen("base_descripteur_image","r"); //On essaie d'ouvrir la base
@@ -360,11 +366,11 @@ void main(){
 		ptr_liste_index=fopen("fic_temp", "r");
 		while(!feof(ptr_liste_index)) {
 			fscanf(ptr_liste_index,"%s\n",chemin_index);
-			empiler_img(&p,indexeur_img(chemin_index, bits_quant));
+			empiler_img(&p,indexeur_img(chemin_index, config.nb_bit_quanti));
 		}
 		fclose(ptr_liste_index);
 		system("rm fic_temp");
-		ecrire_db_img(p);
+		ecrire_db_img(p, config.nb_bit_quanti);
 		printf("Indexation et génération de base de descripteurs image finalisée!\n\n");
 	}
 	else
@@ -412,7 +418,7 @@ void main(){
 		{
 			case 1:
 			{
-				recherche_image();
+				recherche_image(config.nb_bit_quanti);
 				choix_quitter=affichage_fin();
 				break;
 			}

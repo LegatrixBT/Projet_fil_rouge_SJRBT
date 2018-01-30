@@ -14,6 +14,167 @@
 #define TAILLE_MAX_MOT 50
 #define TAILLE_DICO 16
 
+////---------------------------- FONCTIONS POUR L ARBRE BINAIRE-----------------------------------////
+
+void addNoeud(noeud **arbre, char* mot)
+{
+    noeud *noeudAux;
+    noeud *arbreAux = *arbre;
+
+    noeud *elem = malloc(sizeof(noeud));
+	strcpy(elem->mot,mot);
+    elem->gauche = NULL;
+    elem->droite = NULL;
+
+    if(arbreAux)
+    do
+    {
+        noeudAux = arbreAux;
+		if(strcmp(mot,arbreAux->mot)>0)
+        {
+            arbreAux = arbreAux->droite;
+            if(!arbreAux) 
+				noeudAux->droite = elem;
+        }
+        else
+        {
+            arbreAux = arbreAux->gauche;
+            if(!arbreAux) 
+				noeudAux->gauche = elem;
+        }
+    }
+    while(arbreAux);
+    else  *arbre = elem;
+}
+
+void initDico (noeud **Arbre) { // les mots en commentaire ne sont par traité car
+								//on supprime tous ces mots pour alléger le traitement
+								// si on ne considere pas le temps d'indexation comme un parametre important
+								// on laisse tout ces mots et retire la fonction qui coupe les mots de moins de 2 lettres
+	
+	*Arbre = NULL;
+	addNoeud(Arbre, "dans");
+	addNoeud(Arbre, "pour");
+	addNoeud(Arbre, "vers");
+	addNoeud(Arbre, "avec");
+	addNoeud(Arbre, "sans");
+	addNoeud(Arbre, "donc");
+	addNoeud(Arbre, "dont");
+	addNoeud(Arbre, "puis");
+	//addNoeud(Arbre, "l");
+	//addNoeud(Arbre, "t");
+	//addNoeud(Arbre, "d");
+	//addNoeud(Arbre, "le");
+	//addNoeud(Arbre, "en");
+	addNoeud(Arbre, "les");
+	//addNoeud(Arbre, "la");
+	addNoeud(Arbre, "qui");
+	addNoeud(Arbre, "que");
+	addNoeud(Arbre, "quoi");
+	//addNoeud(Arbre, "a");
+	//addNoeud(Arbre, "qu");
+	////addNoeud(Arbre, "de");
+	//addNoeud(Arbre, "da");
+	addNoeud(Arbre, "des");
+	//addNoeud(Arbre, "un");
+	addNoeud(Arbre, "une");
+	//addNoeud(Arbre, "et");
+	//addNoeud(Arbre, "du");
+	addNoeud(Arbre, "par");
+	addNoeud(Arbre, "est");
+	addNoeud(Arbre, "ils");
+	//addNoeud(Arbre, "il");
+	addNoeud(Arbre, "elle");
+	addNoeud(Arbre, "elles");
+	//addNoeud(Arbre, "s");
+	//addNoeud(Arbre, "c");
+	//addNoeud(Arbre, "au");
+	addNoeud(Arbre, "pas");
+	//addNoeud(Arbre, "ce");
+	addNoeud(Arbre, "ces");
+	//addNoeud(Arbre, "n");
+	//addNoeud(Arbre, "ou");
+	addNoeud(Arbre, "sur");
+	//addNoeud(Arbre, "se");
+	addNoeud(Arbre, "nous");
+	addNoeud(Arbre, "ici");
+	//addNoeud(Arbre, "on");
+	addNoeud(Arbre, "lui");
+	//addNoeud(Arbre, "j");
+	addNoeud(Arbre, "plus");
+	//addNoeud(Arbre, "ne");
+	//addNoeud(Arbre, "sa");
+	addNoeud(Arbre, "apres");
+	addNoeud(Arbre, "avoir");
+	//addNoeud(Arbre, "me");
+	addNoeud(Arbre, "cette");
+	addNoeud(Arbre, "ses");
+	addNoeud(Arbre, "ont");
+	//addNoeud(Arbre, "si");
+	addNoeud(Arbre, "avait");
+	addNoeud(Arbre, "etait");
+	addNoeud(Arbre, "mais");
+}
+
+int rechercheNoeud(noeud *arbre, char* mot) // rechercher un mot dans l'arbre
+{
+    while(arbre)
+    {
+		if(strcmp(mot,arbre->mot)==0)
+			return 1;
+
+		if(strcmp(mot,arbre->mot)>0)
+			arbre = arbre->droite;
+        else arbre = arbre->gauche;
+    }
+    return 0;
+}
+
+void afficherArbre(noeud *arbre) // affichage de l'arbre binaire
+{
+    if(!arbre) 
+		return;
+
+    if(arbre->gauche)  
+		afficherArbre(arbre->gauche);
+
+    printf("mot = %s\n", arbre->mot);
+
+    if(arbre->droite) 
+		afficherArbre(arbre->droite);
+}
+
+void afficherInvArbre(noeud *arbre) // affichage inv de l'arbre (pour le tests)
+{
+    if(!arbre) 
+		return;
+
+    if(arbre->droite) 
+		afficherInvArbre(arbre->droite);
+
+    printf("mot = %s\n", arbre->mot);
+
+    if(arbre->gauche)  
+		afficherInvArbre(arbre->gauche);
+}
+
+void viderArbre(noeud **arbre) // vider l'arbre 
+{
+    noeud *arbreAux = *arbre;
+
+    if(!arbre) return;
+
+    if(arbreAux->gauche) 
+		viderArbre(&arbreAux->gauche);
+
+    if(arbreAux->droite) 
+		viderArbre(&arbreAux->droite);
+        
+    free(arbreAux);
+
+    *arbre = NULL;
+}
+
 ////---------------------------- FONCTIONS POUR L INDEXEUR TEXTE-----------------------------------////
 
 void tri_decroissant_desc_t (int tab[], char tabc[][TAILLE_MAX_MOT], int taille){ // tri par insertion decroissant
@@ -72,8 +233,13 @@ type_desc_texte indexeur_textes (char chemin[]) {
 	FILE * ptr_file;			// pointeur sur le fichier traite
 	char commande[200]; 		// chaine contenant les commandes unix
 	////-----Dictionnaire des mots ignorés---------////
-	char dico [TAILLE_DICO][20] = { "dans", "pour", "avec", "sans", "sous", "mais",
+	/*char dico [TAILLE_DICO][20] = { "dans", "pour", "avec", "sans", "sous", "mais",
 	"aussi", "plus", "moins", "tous", "dont","sans", "puis", "donc", "ainsi", "deja"};
+	*/
+	//noeud *Arbre;
+	noeud *Arbre; 
+	initDico(&Arbre);
+	//afficherArbre(Arbre);	// verification du contenu de l'arbre
 	
 	int nbr_mot_texte=0;		// declaration de la variable qui contiendra le nombre de mots du texte et init a 0;
 	char mot[10][50]={'\0'}; 	// declaration de la variable qui contiendra les != mots et init à vide 
@@ -119,9 +285,15 @@ type_desc_texte indexeur_textes (char chemin[]) {
 	strcpy(commande,"< text_temp1 tr 'A-Z' 'a-z' | tr -c a-z0-9 ' ' | tr -s ' ' | tr ' ' '\n' > text_temp2");  // un peu brutal mais efficace 
 	system(commande);
 	
-	//// Réduction des mots de moins de 3 caractères ou moins   !!!! 
-	
+	//// Réduction des mots de moins de 3 caractères ou moins   !!!!   SOLUTION PROVISOIRE
+	/*
 	strcpy(commande,"grep -wve '[a-z]' -wve '[a-z][a-z]' -wve '[a-z][a-z][a-z]' text_temp2 > text_temp1");
+	system(commande);
+	*/
+	
+	//// Réduction des mots de moins de 2 caractères ou moins   !!!!  PERMET INDEXATION PLUS RAPIDE
+	
+	strcpy(commande,"grep -wve '[a-z]' -wve '[a-z][a-z]' text_temp2 > text_temp1");
 	system(commande);
 	
 	//// tri par ordre alphanumérique et alphabétique des mots composant le texte;
@@ -141,12 +313,20 @@ type_desc_texte indexeur_textes (char chemin[]) {
 			
 			if(strcmp(mot_compare, mot_aux)!=0)		// comparaison des chaines  
 			{										// si différentes c'est un nouveau mot, on reset le cpt d'occurence
+				/*
 				for(i=0; i<TAILLE_DICO; i++) 	// On traite les mots exceptions du dictionnaire
 				{
 					if (strcmp(mot_compare,dico[i])==0)
 						strcpy(mot_compare,mot_aux);
 					
 				}
+				*/
+				if(rechercheNoeud(Arbre, mot_compare))
+				{					
+					//printf("La mot %s existe.\n", mot_compare); Pour le debug affichage du mot envoyé 
+					strcpy(mot_compare,mot_aux);
+				}
+				//else printf("La mot %s n'existe pas.\n", mot_compare);
 				
 				if(nb_occurence > occurence[TAILLE_DESC_T-1])	// si ce nouveau mot à plus d'occurence que celui qui en avait le moins on déclence le tri 
 				{
@@ -173,7 +353,6 @@ type_desc_texte indexeur_textes (char chemin[]) {
 		}
 		d.nbr_mot_texte=nbr_mot_texte-1; 	// on affecte au descripteur le nombre de mot du texte réduit
 		//affiche_descripteur(d); 			// on affiche le descripteur
-		
 		fclose(ptr_file); 					// fermeture du fichier de travail 
 	
 	}

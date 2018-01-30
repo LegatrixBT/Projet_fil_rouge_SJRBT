@@ -119,7 +119,7 @@ type_desc_texte depiler_texte(pile_texte * ptr_pile)
 
 /*****************************************************Fonctions gestion DB Image****************************************/
 
-void ecrire_db_img(pile_img p)
+void ecrire_db_img(pile_img p, int bits_quant)
 {
 	if(pile_est_vide_img(p) == 0)
 	{
