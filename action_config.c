@@ -37,7 +37,6 @@ void lecture_config(type_config * config)
 					while(strcmp(variable, "</INDEXEUR_TEXTE>")!=0)
 					{
 						fscanf(fichier,"%s",variable);
-						printf("%s\n",variable);
 						if(strcmp(variable, "TAILLE_MOT")==0)
 							fscanf(fichier,"%d",&(config -> taille_mot));
 						
