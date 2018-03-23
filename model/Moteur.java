@@ -2,13 +2,11 @@ package model;
 
 public class Moteur {
 	
-	private String mdp;
 	private int nbBitsIndexationImage;
 	
 	//Methodes du singleton
 	
 	private Moteur() {
-		this.mdp = "0000";
 		nbBitsIndexationImage = 3;
 	}
 
@@ -21,14 +19,6 @@ public class Moteur {
 	}
 	
 	//Méthodes de la classe
-	
-	public String getMdp() {
-		return mdp;
-	}
-
-	public void setMdp(String mdp) {
-		this.mdp = mdp;
-	}
 	
 	public int getNbBitsIndexationImage() {
 		return nbBitsIndexationImage;
