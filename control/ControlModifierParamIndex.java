@@ -1,5 +1,7 @@
 package control;
 
+import java.util.Observer;
+
 import model.Moteur;
 
 public class ControlModifierParamIndex {
@@ -14,4 +16,7 @@ public class ControlModifierParamIndex {
 		moteur.setNbBitsIndexationImage(nbBits);
 	}
 	
+	public void setObserver(Observer o) {
+		moteur.addObserver(o);
+	}
 }

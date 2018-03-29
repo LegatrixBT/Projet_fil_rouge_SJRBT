@@ -1,6 +1,8 @@
 package model;
 
-public class Profil {
+import java.util.Observable;
+
+public class Profil extends Observable{
 	
 	String mdp;
 	boolean isAdmin = false;
@@ -33,11 +35,15 @@ public class Profil {
 		return isAdmin;
 	}
 	public void connexionAdmin() {
+		this.setChanged();
 		this.isAdmin = true;
+		this.notifyObservers(this.isAdmin);
 	}
 	
 	public void deconnexionAdmin() {
+		this.setChanged();
 		this.isAdmin = false;
+		this.notifyObservers(this.isAdmin);
 	}
 	
 }

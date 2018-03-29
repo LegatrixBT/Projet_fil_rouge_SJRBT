@@ -1,5 +1,7 @@
 package control;
 
+import java.util.Observer;
+
 import model.Profil;
 
 public class ControlSeConnecter {
@@ -17,4 +19,7 @@ public class ControlSeConnecter {
 		profil.deconnexionAdmin();
 	}
 	
+	public void setObserver(Observer observer) {
+		profil.addObserver(observer);
+	}
 }

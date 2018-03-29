@@ -10,12 +10,9 @@ public class ControlVisualiserParamIndex {
 		this.moteur = Moteur.getInstance();
 	}
 	
-	public String visualiserParamIndex() {
+	public int visualiserParamIndex() {
 		
-		String texte = "----------Parametres d'indexation----------\n";
-		texte += moteur.getParamIndex();
-		
-		return texte;
+		return moteur.getParamIndex();
 	}
 	
 }

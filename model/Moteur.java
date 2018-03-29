@@ -1,6 +1,8 @@
 package model;
 
-public class Moteur {
+import java.util.Observable;
+
+public class Moteur extends Observable{
 	
 	private int nbBitsIndexationImage;
 	
@@ -25,14 +27,13 @@ public class Moteur {
 	}
 
 	public void setNbBitsIndexationImage(int nbBitsIndexationImage) {
+		this.setChanged();
 		this.nbBitsIndexationImage = nbBitsIndexationImage;
+		this.notifyObservers(nbBitsIndexationImage);
 	}
 	
-	public String getParamIndex() {
-		String texte = "";
-		texte += "Image:\n";
-		texte += "	Nombre de bits de quantification : " + this.getNbBitsIndexationImage() + "\n";
-		return texte;
+	public int getParamIndex() {
+		return nbBitsIndexationImage;
 	}
 	
 	public boolean indexationImage() {
