@@ -2,8 +2,6 @@ package vuegraphique;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -30,22 +28,6 @@ public class FrameLogiciel extends JFrame implements Observer{
 	private FrameConnexionAdmin frameConnexionAdmin;
 	private ControlVerifierAdmin controlVerifierAdmin;
 	private ControlSeConnecter controlSeConnecter;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameLogiciel frame = new FrameLogiciel();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -87,6 +69,8 @@ public class FrameLogiciel extends JFrame implements Observer{
 		panelOngletAdministrateur = new PanelOngletAdministrateur();
 		panelOngletAdministrateur.setVisible(false);
 		contentPane.add(panelOngletAdministrateur, BorderLayout.WEST);
+		
+		this.setVisible(true);
 		
 	}
 	

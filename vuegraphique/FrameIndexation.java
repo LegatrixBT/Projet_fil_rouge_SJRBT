@@ -1,11 +1,11 @@
 package vuegraphique;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import control.ControlLancerIndexation;
+
+import control.ControlGestionMoteurAdmin;
 
 import javax.swing.JLabel;
 import javax.swing.Box;
@@ -22,30 +22,14 @@ public class FrameIndexation extends JFrame {
 	 */
 	private static final long serialVersionUID = 5108070177044637166L;
 	private JPanel contentPane;
-	private ControlLancerIndexation controlLancerIndexation;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameIndexation frame = new FrameIndexation();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private ControlGestionMoteurAdmin controlGestionMoteurAdmin;
 
 	/**
 	 * Create the frame.
 	 */
-	public FrameIndexation() {
+	public FrameIndexation(ControlGestionMoteurAdmin controlGestionMoteurAdmin) {
 		
-		controlLancerIndexation = new ControlLancerIndexation();
+		this.controlGestionMoteurAdmin = controlGestionMoteurAdmin;
 		
 		this.setSize(300,200);
 		
@@ -71,7 +55,7 @@ public class FrameIndexation extends JFrame {
 		JButton btnImage = new JButton("Images");
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				controlLancerIndexation.lancerIndexationImage();
+				controlGestionMoteurAdmin.lancerIndexationImage();
 			}
 		});
 		btnImage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -83,7 +67,7 @@ public class FrameIndexation extends JFrame {
 		JButton btnTexte = new JButton("Textes");
 		btnTexte.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controlLancerIndexation.lancerIndexationTexte();
+				controlGestionMoteurAdmin.lancerIndexationTexte();
 			}
 		});
 		btnTexte.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -102,8 +86,8 @@ public class FrameIndexation extends JFrame {
 		JButton btnTout = new JButton("Tout");
 		btnTout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controlLancerIndexation.lancerIndexationImage();
-				controlLancerIndexation.lancerIndexationTexte();
+				controlGestionMoteurAdmin.lancerIndexationImage();
+				controlGestionMoteurAdmin.lancerIndexationTexte();
 			}
 		});
 		btnTout.setAlignmentX(Component.CENTER_ALIGNMENT);

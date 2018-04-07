@@ -1,51 +1,96 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
-public class Moteur extends Observable{
+public abstract class Moteur extends Observable{
 	
-	private int nbBitsIndexationImage;
-	
-	//Methodes du singleton
-	
-	private Moteur() {
-		nbBitsIndexationImage = 3;
-	}
+	private int nbBitIndexationImage;
+	private int nbMotDescripteur;
+	private boolean moteurPrincipal;
+	private boolean moteurActif;
+	private String nomMoteur;   //    NOMMER CHAQUE MOTEUR SELON SES PARAMEMTRES 
 
-	private static class MoteurHolder{
-		private static final Moteur instance = new Moteur();
+	public int getNbMotDescripteur() {
+		return this.nbMotDescripteur;
 	}
 	
-	public static Moteur getInstance() {
-		return MoteurHolder.instance;
-	}
-	
-	//Méthodes de la classe
-	
-	public int getNbBitsIndexationImage() {
-		return nbBitsIndexationImage;
-	}
-
-	public void setNbBitsIndexationImage(int nbBitsIndexationImage) {
+	public void setNbMotDescripteur(int nbMotDescripteur) {
+		Integer[] parametres = new Integer[2];
 		this.setChanged();
-		this.nbBitsIndexationImage = nbBitsIndexationImage;
-		this.notifyObservers(nbBitsIndexationImage);
+		this.nbMotDescripteur = nbMotDescripteur;
+		parametres[0] = nbBitIndexationImage;
+		parametres[1] = nbMotDescripteur;
+		this.notifyObservers(parametres);
 	}
 	
-	public int getParamIndex() {
-		return nbBitsIndexationImage;
+	public int getNnbBitIndexationImage() {
+		return this.nbBitIndexationImage;
 	}
 	
-	public boolean indexationImage() {
-		//TODO integrer partie C
-		System.out.println("Indexation image\n");
-		return true;
+	public void setNnbBitIndexationImage(int nbBitIndexationImage) {
+		Integer[] parametres = new Integer[2];
+		this.setChanged();
+		this.nbBitIndexationImage = nbBitIndexationImage;
+		parametres[0] = nbBitIndexationImage;
+		parametres[1] = nbMotDescripteur;
+		this.notifyObservers(parametres);
+	}
+	
+	public List<String> getSpecMoteur() {
+		//System.out.println("Les paramètres du moteur sont les suivants : \n");
+		List<String> listeParametreMoteur = new ArrayList<String>();
+		listeParametreMoteur.add(String.valueOf(nbBitIndexationImage));
+		listeParametreMoteur.add(String.valueOf(nbMotDescripteur));
+		listeParametreMoteur.add(String.valueOf(moteurActif));
+		listeParametreMoteur.add(String.valueOf(moteurPrincipal));
+		//System.out.println("1 : bit indexation 2 mot desc 3 moteur actif 4 moteur principal : " + listeParametreMoteur.toString());
+		return listeParametreMoteur;
+		
+	}
+	
+	public boolean isMoteurPrincipal() {
+		return moteurPrincipal;
+	}
+	
+	public void setMoteurPrincipal() {
+		this.setChanged();
+		this.moteurPrincipal = true;
+		this.notifyObservers(this);
+	}
+	
+	public void unsetMoteurPrincipal() {
+		this.moteurPrincipal = false;
+	}
+	
+	public boolean isMoteurActif() {
+		return moteurActif;
+	}
+	
+	public void setMoteurActif() {
+		this.moteurActif = true;
+	}
+	
+	public void unsetMoteurActif() {
+		this.moteurActif = false;
 	}
 	
 	public boolean indexationTexte() {
-		//TODO integrer partie C
-		System.out.println("Indexation texte\n");
+		System.out.println("Indexation texte avec descripteur de taille :" + getNbMotDescripteur() + "\n");
 		return true;
 	}
 	
+	public boolean indexationImage() {
+		System.out.println("Indexation image avec " + getNnbBitIndexationImage() + " bits de quantification...\n");
+		return true;
+	}
+	
+	public void setNom(String nom) {
+		nomMoteur = nom;
+	}
+	
+	public String toString() {
+		return nomMoteur;
+	}
 }

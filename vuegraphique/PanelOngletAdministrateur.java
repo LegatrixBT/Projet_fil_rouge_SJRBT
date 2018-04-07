@@ -6,8 +6,7 @@ import java.awt.Font;
 import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
 
-import control.ControlModifierParamIndex;
-import control.ControlVisualiserParamIndex;
+import control.ControlGestionMoteurAdmin;
 import model.Moteur;
 
 import javax.swing.Box;
@@ -26,13 +25,11 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 
 	//Objets interface
 	private JLabel lblNbBitsVal;
+	private JLabel lblNbMotsDescVal;
 	private FrameIndexation frameIndexation;
 	private Box boxModifier;
 	private Box boxOngletAdmin;
-	private ControlModifierParamIndex controlModifierParamIndex;
-	
-	//Objets metier
-	ControlVisualiserParamIndex controlVisualiserParamIndex;
+	private ControlGestionMoteurAdmin controlGestionMoteurAdmin;
 	
 	
 	/**
@@ -46,11 +43,10 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 	public PanelOngletAdministrateur() {
 		
 		//init objets metier
-		controlVisualiserParamIndex = new ControlVisualiserParamIndex();
-		frameIndexation = new FrameIndexation();
+		controlGestionMoteurAdmin = new ControlGestionMoteurAdmin();
+		frameIndexation = new FrameIndexation(this.controlGestionMoteurAdmin);
 		frameIndexation.setVisible(false);
-		this.controlModifierParamIndex = new ControlModifierParamIndex();
-		this.controlModifierParamIndex.setObserver(this);
+		this.controlGestionMoteurAdmin.setObserver(this);
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
@@ -148,16 +144,16 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 		Box boxExempleParamTexte = Box.createHorizontalBox();
 		boxParamTexte.add(boxExempleParamTexte);
 		
-		JLabel lblExemple = new JLabel("Exemple");
-		lblExemple.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		boxExempleParamTexte.add(lblExemple);
+		JLabel lblNbMotsDesc = new JLabel("Nb mots descripteur :");
+		lblNbMotsDesc.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		boxExempleParamTexte.add(lblNbMotsDesc);
 		
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(10, 0));
 		boxExempleParamTexte.add(rigidArea_1);
 		
-		JLabel lblDesactive = new JLabel("DESACTIVE");
-		lblDesactive.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		boxExempleParamTexte.add(lblDesactive);
+		lblNbMotsDescVal = new JLabel("");
+		lblNbMotsDescVal.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		boxExempleParamTexte.add(lblNbMotsDescVal);
 		
 		Component verticalStrut_5 = Box.createVerticalStrut(20);
 		boxParamTexte.add(verticalStrut_5);
@@ -272,6 +268,9 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 		Box boxParamQuantifModif = Box.createHorizontalBox();
 		boxImageModif.add(boxParamQuantifModif);
 		
+		Component horizontalGlue_3 = Box.createHorizontalGlue();
+		boxParamQuantifModif.add(horizontalGlue_3);
+		
 		JLabel lbQuantif = new JLabel("bits de quant. :");
 		boxParamQuantifModif.add(lbQuantif);
 		
@@ -282,6 +281,9 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 		spinnerQuantifModif.setModel(new SpinnerNumberModel(1, 1, 5, 1));
 		spinnerQuantifModif.setMaximumSize(new Dimension(30,20));
 		boxParamQuantifModif.add(spinnerQuantifModif);
+		
+		Component horizontalGlue_7 = Box.createHorizontalGlue();
+		boxParamQuantifModif.add(horizontalGlue_7);
 		
 		Component verticalGlue_4 = Box.createVerticalGlue();
 		boxImageModif.add(verticalGlue_4);
@@ -302,16 +304,23 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 		Box boxExempleParamTexteModif = Box.createHorizontalBox();
 		boxTexteModif.add(boxExempleParamTexteModif);
 		
-		JLabel lblExempleTexteModif = new JLabel("Exemple");
+		Component horizontalGlue_4 = Box.createHorizontalGlue();
+		boxExempleParamTexteModif.add(horizontalGlue_4);
+		
+		JLabel lblExempleTexteModif = new JLabel("Nb mots descripteur :");
 		lblExempleTexteModif.setAlignmentX(Component.CENTER_ALIGNMENT);
 		boxExempleParamTexteModif.add(lblExempleTexteModif);
 		
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		boxExempleParamTexteModif.add(horizontalGlue_1);
 		
-		JLabel lblDesactive_2 = new JLabel("DESACTIVE");
-		lblDesactive_2.setAlignmentX(Component.CENTER_ALIGNMENT);
-		boxExempleParamTexteModif.add(lblDesactive_2);
+		JSpinner spinnerNbMotsDesc = new JSpinner();
+		spinnerNbMotsDesc.setModel(new SpinnerNumberModel(10, 0, 30, 1));
+		spinnerNbMotsDesc.setMaximumSize(new Dimension(30,20));
+		boxExempleParamTexteModif.add(spinnerNbMotsDesc);
+		
+		Component horizontalGlue_6 = Box.createHorizontalGlue();
+		boxExempleParamTexteModif.add(horizontalGlue_6);
 		
 		Component verticalGlue_5 = Box.createVerticalGlue();
 		boxTexteModif.add(verticalGlue_5);
@@ -332,6 +341,9 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 		Box boxExempleParamSonModif = Box.createHorizontalBox();
 		boxModifSon.add(boxExempleParamSonModif);
 		
+		Component horizontalGlue_5 = Box.createHorizontalGlue();
+		boxExempleParamSonModif.add(horizontalGlue_5);
+		
 		JLabel label = new JLabel("Exemple");
 		boxExempleParamSonModif.add(label);
 		
@@ -340,6 +352,9 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 		
 		JLabel label_1 = new JLabel("DESACTIVE");
 		boxExempleParamSonModif.add(label_1);
+		
+		Component horizontalGlue_8 = Box.createHorizontalGlue();
+		boxExempleParamSonModif.add(horizontalGlue_8);
 		
 		Component verticalGlue_6 = Box.createVerticalGlue();
 		boxModifSon.add(verticalGlue_6);
@@ -355,7 +370,9 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int nbBitsQuantif = (int) spinnerQuantifModif.getValue();
-				controlModifierParamIndex.modifierNbBitsIndex(nbBitsQuantif);
+				int nbMotsDesc = (int) spinnerNbMotsDesc.getValue();
+				controlGestionMoteurAdmin.modifierNbBitsIndex(nbBitsQuantif);
+				controlGestionMoteurAdmin.modifierNbMotsDesc(nbMotsDesc);
 				boxModifier.setVisible(false);
 				boxOngletAdmin.setVisible(true);
 			}
@@ -370,16 +387,28 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 	
 	public void ouvertureOngletAdmin() {
 		
-		Integer nbBitsQuant = controlVisualiserParamIndex.visualiserParamIndex();
-		lblNbBitsVal.setText(nbBitsQuant.toString());
+		Integer[] parametres = controlGestionMoteurAdmin.visualiserParamIndex();
+		lblNbBitsVal.setText(parametres[0].toString());
+		lblNbMotsDescVal.setText(parametres[1].toString());
 		this.setVisible(true);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		if(o instanceof Moteur) {
-			Integer nbBitsQuantif = (Integer) arg;
-			lblNbBitsVal.setText(nbBitsQuantif.toString());
+			if(arg instanceof Moteur) {
+				controlGestionMoteurAdmin.miseAJourMoteurPrincipal();
+				Integer[] parametres = controlGestionMoteurAdmin.visualiserParamIndex();
+				lblNbBitsVal.setText(parametres[0].toString());
+				lblNbMotsDescVal.setText(parametres[1].toString());
+			}
+			else {
+				if(arg instanceof Integer[]) {
+					Integer[] parametres = (Integer[]) arg;
+					lblNbBitsVal.setText(parametres[0].toString());
+					lblNbMotsDescVal.setText(parametres[1].toString());
+				}
+			}
 		}
 	}
 
