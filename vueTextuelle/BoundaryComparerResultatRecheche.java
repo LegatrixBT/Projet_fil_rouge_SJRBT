@@ -9,7 +9,6 @@ import model.Moteur;
 public class BoundaryComparerResultatRecheche {
 
 	ControlMoteurActifs controlMoteurActifs = new ControlMoteurActifs();
-	Control
 	
 	
 	public void comparerResultatRecherche () {

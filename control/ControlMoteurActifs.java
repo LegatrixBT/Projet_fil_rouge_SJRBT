@@ -20,7 +20,7 @@ public class ControlMoteurActifs {
 		
 		for (Moteur moteur : listeMoteurLue) {
 			if (moteur.isMoteurActif()) {
-				System.out.println("Moteur x actif  " + moteur + "\n");
+				//System.out.println("Moteur x actif  " + moteur + "\n");
 				listeMoteurActif.add(moteur);
 			}	
 		}

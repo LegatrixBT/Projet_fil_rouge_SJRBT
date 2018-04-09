@@ -1,12 +1,8 @@
 package vueTextuelle;
 
-import java.util.List;
-
 import control.ControlChangerMoteur;
-import control.ControlMoteurActifs;
 import model.BaseMoteur;
 import model.Moteur;
-import model.TypeMoteur;
 
 public class BoundaryChoisirMoteur {
 	
@@ -25,9 +21,9 @@ public class BoundaryChoisirMoteur {
 		while(!choixMoteur.equals("5")) {
 			while((!choixMoteur.equals("1")) && (!choixMoteur.equals("2"))
 					&& (!choixMoteur.equals("3")) && (!choixMoteur.equals("4"))) {
-				System.out.println("(1) Moteur n°1 de type \n");
-				System.out.println("(2) Moteur n°2 de type \n");
-				System.out.println("(3) Afficher les paramètres des moteurs \n");
+				System.out.println("(1) Moteur nÂ°1 de type \n");
+				System.out.println("(2) Moteur nÂ°2 de type \n");
+				System.out.println("(3) Afficher les paramÃ¨tres des moteurs \n");
 				System.out.println("(4) Annuler les Modifications en cours \n");
 				choixMoteur = clavier.entrerClavierString();
 				
