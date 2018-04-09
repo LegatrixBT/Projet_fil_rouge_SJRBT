@@ -1,0 +1,9 @@
+
+int nbBitIndexationImage = 2;
+int nbMotDescripteur = 5;
+
+tapas 5
+poulet 22 
+javagasquie 1000
+table 50 
+ecran 15 

@@ -12,9 +12,8 @@ public class Moteur2 extends Moteur{
 		return MoteurHolder.instance;
 	}
 	
-	// Méthodes du moteur 
-	
-	
+	// MÃ©thodes du moteur 
+
 	public Moteur2() {
 		
 		this.setNbMotDescripteur(10);

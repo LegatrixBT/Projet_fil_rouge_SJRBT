@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Observable;
 
 public abstract class Moteur extends Observable{
+
 	
 	private int nbBitIndexationImage;
 	private int nbMotDescripteur;
@@ -39,7 +40,7 @@ public abstract class Moteur extends Observable{
 	}
 	
 	public List<String> getSpecMoteur() {
-		//System.out.println("Les paramètres du moteur sont les suivants : \n");
+		//System.out.println("Les paramÃ¨tres du moteur sont les suivants : \n");
 		List<String> listeParametreMoteur = new ArrayList<String>();
 		listeParametreMoteur.add(String.valueOf(nbBitIndexationImage));
 		listeParametreMoteur.add(String.valueOf(nbMotDescripteur));
@@ -80,7 +81,7 @@ public abstract class Moteur extends Observable{
 		System.out.println("Indexation texte avec descripteur de taille :" + getNbMotDescripteur() + "\n");
 		return true;
 	}
-	
+
 	public boolean indexationImage() {
 		System.out.println("Indexation image avec " + getNnbBitIndexationImage() + " bits de quantification...\n");
 		return true;
