@@ -7,7 +7,6 @@ import vueTextuelle.BoundaryChoisirMoteur;
 import vuegraphique.FrameLogiciel;
 import vuegraphique.PanelOngletRechercheAvancee;
 
-
 public class TestFrameLogiciel {
 	
 	private static UsineMoteur usineMoteur = new UsineMoteur();
