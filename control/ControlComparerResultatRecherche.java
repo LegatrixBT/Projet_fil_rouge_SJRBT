@@ -1,4 +1,4 @@
-package control;
+ackage control;
 
 public class ControlComparerResultatRecherche {
 

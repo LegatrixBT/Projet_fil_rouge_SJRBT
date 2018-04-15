@@ -47,29 +47,6 @@ public class ControlMoteurActifs {
 		return listeMoteurInactif;
 		
 	}
-	
-	public void setListeMoteurActif(List<Moteur> listeMoteurInactif) {
-		
-		List<Moteur> listeMoteurActif = new ArrayList <>();
-		
-		for (Moteur moteur : listeMoteurInactif) {
-			moteur.setMoteurActif();
-			//listeMoteurActif.add(moteur);
-			baseMoteur.ajouterMoteur(moteur);
-		}
-		
-	}
-	
-	public void setListeMoteurInactif(List<Moteur> listeMoteurActif) {
-		
-		List<Moteur> listeMoteurInactif = new ArrayList <>();
-		
-		for (Moteur moteur : listeMoteurActif) {
-			moteur.unsetMoteurActif();
-			//listeMoteurInactif.add(moteur); 
-			baseMoteur.ajouterMoteur(moteur);
-		}
-	}
 }
 	
 	
