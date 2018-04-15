@@ -35,7 +35,6 @@ public class FrameLogiciel extends JFrame implements Observer{
 	private FrameConnexionAdmin frameConnexionAdmin;
 	private ControlVerifierAdmin controlVerifierAdmin;
 	private ControlSeConnecter controlSeConnecter;
-	
 
 	/**
 	 * Create the frame.
@@ -77,7 +76,7 @@ public class FrameLogiciel extends JFrame implements Observer{
 		
 		panelOngletAdministrateur = new PanelOngletAdministrateur();
 		panelOngletAdministrateur.setVisible(false);
-		
+
 		contentPane.add(panelOngletAdministrateur, BorderLayout.WEST);
 		
 		this.setVisible(true);

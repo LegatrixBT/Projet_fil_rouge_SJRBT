@@ -28,7 +28,7 @@ public class ControlMoteurActifs {
 		return listeMoteurActif;
 
 	}
-	
+  
 	public List<Moteur> getMoteurInactifs() {
 		
 		List<Moteur> listeMoteurInactif = new ArrayList <>();// attention si null pointer exception
@@ -43,7 +43,7 @@ public class ControlMoteurActifs {
 		}
 		
 		if (listeMoteurInactif.isEmpty())
-			System.out.println("Tous les moteurs sont déjà activés");
+			System.out.println("Tous les moteurs sont dï¿½jï¿½ activï¿½s");
 		return listeMoteurInactif;
 		
 	}
@@ -70,7 +70,6 @@ public class ControlMoteurActifs {
 			baseMoteur.ajouterMoteur(moteur);
 		}
 	}
-	
 }
 	
 	
