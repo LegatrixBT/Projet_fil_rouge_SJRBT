@@ -30,7 +30,7 @@ public class FrameLogiciel extends JFrame implements Observer{
 	private FrameConnexionAdmin frameConnexionAdmin;
 	private ControlVerifierAdmin controlVerifierAdmin;
 	private ControlSeConnecter controlSeConnecter;
-	private PanelRecherche panelRecherche;
+	private PanelRechercheInt panelRecherche;
 	private PanelOngletRechercheAvancee panelOngletRechercheAvancee;
 	private JMenu mnRechercheMultimoteurs;
 	private JCheckBoxMenuItem chckbxmntmAfficherLonglet;
@@ -92,7 +92,7 @@ public class FrameLogiciel extends JFrame implements Observer{
 		panelOngletAdministrateur.setVisible(false);
 		contentPane.add(panelOngletAdministrateur, BorderLayout.WEST);
 		
-		panelRecherche = new PanelRecherche();
+		panelRecherche = new PanelRechercheInt();
 		panelRecherche.setVisible(true);
 		contentPane.add(panelRecherche, BorderLayout.CENTER);
 		

@@ -2,6 +2,7 @@ package vuegraphique;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Panel;
@@ -29,6 +30,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.BoxLayout;
 
 public class PanelRecherche extends JPanel {
 
@@ -39,6 +41,9 @@ public class PanelRecherche extends JPanel {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextField textField_motRecherches;
 	private JTextField textField_motAexclure;
+	private Box boxResImage;
+	private Box boxResTexte;
+	private Box boxResSon;
 	
 
 	JFileChooser chooser= new JFileChooser();
@@ -49,82 +54,102 @@ public class PanelRecherche extends JPanel {
 	JPanel panelFinalInteg = new JPanel();
 	this.setBounds(0, 0, 635, 400);
 	this.setLayout(null);
+	panelFinalInteg.setLayout(new BoxLayout(panelFinalInteg, BoxLayout.Y_AXIS));
 	
-	JPanel Choix = new JPanel();
-	Choix.setBounds(24, 0, 587, 56);
-	panelFinalInteg.add(Choix);
-	Choix.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Type de recherche", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-	Choix.setLayout(null);
-	
-	Box horizontalBox = Box.createHorizontalBox();
-	horizontalBox.setBounds(6, 16, 575, 33);
-	Choix.add(horizontalBox);
+	Box boxChoixTypeRech = Box.createHorizontalBox();
+	panelFinalInteg.add(boxChoixTypeRech);
 	
 	Component horizontalGlue_3 = Box.createHorizontalGlue();
-	horizontalBox.add(horizontalGlue_3);
+	boxChoixTypeRech.add(horizontalGlue_3);
 	
 	JRadioButtonMenuItem rdbtnmntmTexte_1 = new JRadioButtonMenuItem("Texte");
 	rdbtnmntmTexte_1.setSelected(true);
 	
-	horizontalBox.add(rdbtnmntmTexte_1);
+	boxChoixTypeRech.add(rdbtnmntmTexte_1);
 	rdbtnmntmTexte_1.setBackground(UIManager.getColor("Button.background"));
 	buttonGroup.add(rdbtnmntmTexte_1);
 	
 	Component horizontalGlue_1 = Box.createHorizontalGlue();
-	horizontalBox.add(horizontalGlue_1);
+	boxChoixTypeRech.add(horizontalGlue_1);
 	
 	JRadioButtonMenuItem rdbtnmntmImage = new JRadioButtonMenuItem("Image");
 	
-	horizontalBox.add(rdbtnmntmImage);
+	boxChoixTypeRech.add(rdbtnmntmImage);
 	buttonGroup.add(rdbtnmntmImage);
 	
 	Component horizontalGlue = Box.createHorizontalGlue();
-	horizontalBox.add(horizontalGlue);
+	boxChoixTypeRech.add(horizontalGlue);
 	
 	JRadioButtonMenuItem rdbtnmntmSon = new JRadioButtonMenuItem("Son");
 	
-	horizontalBox.add(rdbtnmntmSon);
+	boxChoixTypeRech.add(rdbtnmntmSon);
 	buttonGroup.add(rdbtnmntmSon);
 	
 	Component horizontalGlue_2 = Box.createHorizontalGlue();
-	horizontalBox.add(horizontalGlue_2);
+	boxChoixTypeRech.add(horizontalGlue_2);
 	
-	JPanel panelTexte = new JPanel();
-	panelTexte.setBounds(33, 70, 569, 301);
-	panelFinalInteg.add(panelTexte);
-	panelTexte.setLayout(null);
+	rdbtnmntmTexte_1.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			
+			boxResImage.setVisible(false);
+			boxResSon.setVisible(false);
+			boxResTexte.setVisible(true);
+		}
+	});
 	
-	Box horizontalBox_2 = Box.createHorizontalBox();
-	horizontalBox_2.setBounds(34, 0, 500, 22);
-	panelTexte.add(horizontalBox_2);
+	rdbtnmntmImage.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			boxResTexte.setVisible(false);
+			boxResSon.setVisible(false);
+			boxResImage.setVisible(true);
+			
+		}
+	});
 	
-	JTextPane txtpnMotsChercher = new JTextPane();
-	horizontalBox_2.add(txtpnMotsChercher);
-	txtpnMotsChercher.setFont(new Font("Tahoma", Font.PLAIN, 14));
-	txtpnMotsChercher.setBackground(SystemColor.menu);
-	txtpnMotsChercher.setEditable(false);
-	txtpnMotsChercher.setText("Mots \u00E0 chercher");
+	rdbtnmntmSon.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			boxResTexte.setVisible(false);
+			boxResImage.setVisible(false);
+			boxResSon.setVisible(true);
+		}
+	});
 	
-	Component horizontalGlue_6 = Box.createHorizontalGlue();
-	horizontalBox_2.add(horizontalGlue_6);
+	Box boxOptionsRecherche = Box.createVerticalBox();
+	boxOptionsRecherche.setAlignmentX(Component.CENTER_ALIGNMENT);
+	panelFinalInteg.add(boxOptionsRecherche);
 	
-	Component horizontalStrut_1 = Box.createHorizontalStrut(70);
-	horizontalBox_2.add(horizontalStrut_1);
+	Box boxMotsInclure = Box.createHorizontalBox();
+	boxMotsInclure.setAlignmentY(Component.CENTER_ALIGNMENT);
+	boxOptionsRecherche.add(boxMotsInclure);
 	
 	Component horizontalGlue_7 = Box.createHorizontalGlue();
-	horizontalBox_2.add(horizontalGlue_7);
+	boxMotsInclure.add(horizontalGlue_7);
+	
+	JLabel lblMotsChercher = new JLabel("Mots \u00E0 chercher");
+	lblMotsChercher.setFont(new Font("Tahoma", Font.PLAIN, 14));
+	boxMotsInclure.add(lblMotsChercher);
+	
+	Component horizontalStrut_1 = Box.createHorizontalStrut(70);
+	boxMotsInclure.add(horizontalStrut_1);
+	
+	Component horizontalGlue_6 = Box.createHorizontalGlue();
+	boxMotsInclure.add(horizontalGlue_6);
 	
 	textField_motRecherches = new JTextField();
+	textField_motRecherches.setMaximumSize(new Dimension(80,30));
 	textField_motRecherches.setToolTipText("S\u00E9parer les mots par un espace.");
-	horizontalBox_2.add(textField_motRecherches);
+	boxMotsInclure.add(textField_motRecherches);
 	textField_motRecherches.setColumns(10);
 	
-	Box horizontalBox_1 = Box.createHorizontalBox();
-	horizontalBox_1.setBounds(34, 40, 500, 22);
-	panelTexte.add(horizontalBox_1);
+	Component horizontalGlue_8 = Box.createHorizontalGlue();
+	boxMotsInclure.add(horizontalGlue_8);
+	
+	Box boxMotsExclure = Box.createHorizontalBox();
+	boxMotsExclure.setAlignmentY(Component.CENTER_ALIGNMENT);
+	boxOptionsRecherche.add(boxMotsExclure);
 	
 	Component horizontalGlue_5 = Box.createHorizontalGlue();
-	horizontalBox_1.add(horizontalGlue_5);
+	boxMotsExclure.add(horizontalGlue_5);
 	
 	JCheckBox chckbxMotsExclure = new JCheckBox("Mots \u00E0 exclure");
 	chckbxMotsExclure.setSelected(true);
@@ -138,52 +163,57 @@ public class PanelRecherche extends JPanel {
 		}
 	});
 	chckbxMotsExclure.setToolTipText("Cocher si vous souhaitez que les r\u00E9sultats ne comportent pas certains mots.");
-	horizontalBox_1.add(chckbxMotsExclure);
+	boxMotsExclure.add(chckbxMotsExclure);
 	
 	Component horizontalStrut = Box.createHorizontalStrut(165);
-	horizontalBox_1.add(horizontalStrut);
+	boxMotsExclure.add(horizontalStrut);
 	
 	Component horizontalGlue_4 = Box.createHorizontalGlue();
-	horizontalBox_1.add(horizontalGlue_4);
+	boxMotsExclure.add(horizontalGlue_4);
 	
 	textField_motAexclure = new JTextField();
+	textField_motAexclure.setMaximumSize(new Dimension(80,30));
 	textField_motAexclure.setToolTipText("S\u00E9parer les mots par un espace.");
-	horizontalBox_1.add(textField_motAexclure);
+	boxMotsExclure.add(textField_motAexclure);
 	textField_motAexclure.setColumns(10);
 	
+	Component horizontalGlue_9 = Box.createHorizontalGlue();
+	boxMotsExclure.add(horizontalGlue_9);
 	
-	Box horizontalBox_3 = Box.createHorizontalBox();
-	horizontalBox_3.setBounds(221, 80, 160, 23);
-	panelTexte.add(horizontalBox_3);
+	
+	Box boxLancerRech = Box.createHorizontalBox();
+	boxLancerRech.setAlignmentY(Component.CENTER_ALIGNMENT);
+	boxOptionsRecherche.add(boxLancerRech);
 	
 	JButton btnLancerLaRecherche = new JButton("Lancer la recherche");
-	horizontalBox_3.add(btnLancerLaRecherche);
+	boxLancerRech.add(btnLancerLaRecherche);
 	btnLancerLaRecherche.setHorizontalAlignment(SwingConstants.LEFT);
 	
+	
+	btnLancerLaRecherche.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			//txtResRecTextes.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent à voir si le scroll fonctionne.\n");
+		}
+	});
+	
+	Box boxResultats = Box.createHorizontalBox();
+	panelFinalInteg.add(boxResultats);
+	
+	Box boxResTexte = Box.createVerticalBox();
+	boxResultats.add(boxResTexte);
+	
 	JScrollPane scrollPane = new JScrollPane();
-	scrollPane.setBounds(34, 130, 500, 150);
-	panelTexte.add(scrollPane);
+	boxResTexte.add(scrollPane);
 	
 	JTextPane txtResRecTextes = new JTextPane();
 	txtResRecTextes.setEditable(false);
 	scrollPane.setViewportView(txtResRecTextes);
 	
-	
-	btnLancerLaRecherche.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			txtResRecTextes.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent à voir si le scroll fonctionne.\n");
-		}
-	});
-	
-	Panel panelImage = new Panel();
-	panelImage.setBounds(33, 70, 569, 301);
-	panelFinalInteg.add(panelImage);
-	panelImage.setLayout(null);
-	panelImage.setBackground(SystemColor.menu);
+	boxResImage = Box.createVerticalBox();
+	boxResultats.add(boxResImage);
 	
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	tabbedPane.setBounds(0, 0, 569, 301);
-	panelImage.add(tabbedPane);
+	boxResImage.add(tabbedPane);
 	
 	JPanel panelimageFile = new JPanel();
 	panelimageFile.setToolTipText("Si vous voulez chercher une image que vous poss\u00E9dez d\u00E9j\u00E0.");
@@ -230,17 +260,6 @@ public class PanelRecherche extends JPanel {
 	
 	lblNewLabelAffImage.setForeground(Color.DARK_GRAY);
 	lblNewLabelAffImage.setBackground(Color.DARK_GRAY);
-	/*BufferedImage img = null;
-	try {
-	    img = ImageIO.read(new File(System.getProperty("user.dir") + "/questions.jpg"));
-	} catch (IOException e1) {
-	    e1.printStackTrace();
-	}
-	Image dimg = img.getScaledInstance(lblNewLabelAffImage.getWidth(), lblNewLabelAffImage.getHeight(),
-	        Image.SCALE_SMOOTH);
-	ImageIcon imageIcon = new ImageIcon(dimg);
-	
-	lblNewLabelAffImage.setIcon(imageIcon);*/
 	
 	JPanel panelImageCouleurs = new JPanel();
 	panelImageCouleurs.setToolTipText("Si vous cherchez une image bas\u00E9e sur sa couleur dominante.");
@@ -312,38 +331,7 @@ public class PanelRecherche extends JPanel {
 	
 	JLabel lblAffImageCouleur = new JLabel("");
 	lblAffImageCouleur.setBounds(260, 0, 240, 150);
-	
-	/*BufferedImage img2 = null;
-	try {
-	    img2 = ImageIO.read(new File("questions.jpg"));
-	} catch (IOException e2) {
-	    e2.printStackTrace();
-	}
-	Image dimg2 = img2.getScaledInstance(lblAffImageCouleur.getWidth(), lblAffImageCouleur.getHeight(),
-	        Image.SCALE_SMOOTH);
-	ImageIcon imageIcon2 = new ImageIcon(dimg2);
-	
-	lblAffImageCouleur.setIcon(imageIcon2);*/
 	panelResRecImageCoul.add(lblAffImageCouleur);
-	
-	JPanel panelSon = new JPanel();
-	panelSon.setBounds(33, 70, 569, 301);
-	panelFinalInteg.add(panelSon);
-	panelSon.setLayout(null);
-	
-	Box horizontalBox_8 = Box.createHorizontalBox();
-	horizontalBox_8.setBounds(84, 130, 400, 40);
-	panelSon.add(horizontalBox_8);
-	
-	JTextPane textPaneplaceholder = new JTextPane();
-	horizontalBox_8.add(textPaneplaceholder);
-	textPaneplaceholder.setText("PLACEHOLDER");
-	textPaneplaceholder.setFont(new Font("Tahoma", Font.PLAIN, 18));
-	textPaneplaceholder.setBackground(SystemColor.textHighlight);
-	textPaneplaceholder.setEditable(false);
-	
-	JButton btnNewButton = new JButton("New button");
-	horizontalBox_8.add(btnNewButton);
 	
 	ResultatRechercheImageFile.setVisible(false);
 	btnFichier_a_chercher.addActionListener(new ActionListener() {
@@ -401,38 +389,10 @@ public class PanelRecherche extends JPanel {
 		}
 	});
 	
-	rdbtnmntmTexte_1.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			
-			panelImage.setVisible(false);
-			panelSon.setVisible(false);
-			panelTexte.setVisible(true);
-		}
-	});
-	
-	rdbtnmntmImage.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			panelTexte.setVisible(false);
-			panelSon.setVisible(false);
-			panelImage.setVisible(true);
-			
-		}
-	});
-	
-	rdbtnmntmSon.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			panelTexte.setVisible(false);
-			panelImage.setVisible(false);
-			panelSon.setVisible(true);
-		}
-	});
-	
 	if(!panelimageFile.isShowing())
 		ResultatRechercheImageFile.setVisible(false);
-	
-	this.add(Choix);
-	this.add(panelTexte);
-	this.add(panelImage);
-	this.add(panelSon);
+
+	boxChoixTypeRech.setVisible(true);
+	this.setVisible(true);
 	}
 }

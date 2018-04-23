@@ -23,4 +23,8 @@ public class EntreeRecherche implements Comparable<EntreeRecherche> {
 		return distance;
 	}
 	
+	public String toString() {
+		return cheminFichier + " - " + distance.toString() + "%";
+	}
+	
 }
