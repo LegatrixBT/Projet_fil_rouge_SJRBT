@@ -3,6 +3,8 @@ package model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -25,6 +27,7 @@ public abstract class Moteur extends Observable{
 	
 	public Moteur() {
 		fonctionsJNI = new FonctionsJNI();
+		moteurActif = false;
 	}
 
 	public int getNbMotDescripteur() {
@@ -125,94 +128,85 @@ public abstract class Moteur extends Observable{
 		return nomMoteur;
 	}
 	
-	public Set<EntreeRecherche> rechercheImage(String cheminImage){
+	public Set<EntreeRecherche> rechercheImage(String cheminImage) throws FileNotFoundException, ParseException{
 		Set<EntreeRecherche> setRes = new TreeSet<>();
 		File listeRes = new File("liste_res");
 		String cheminTemp;
 		Float valeurTemp;
-		try {
-			fonctionsJNI.rechercheImage(cheminImage);
-			Scanner sc = new Scanner(listeRes); //On lit le fichier des resultats
-			while(sc.hasNext()) { //tant qu'on a pas lu tout le fichier...
-				cheminTemp = sc.next();
-				try {
-					valeurTemp = (Float) NumberFormat.getInstance().parse(sc.next()).floatValue(); //conversion en float d'un string de type xx,xx
-					setRes.add(new EntreeRecherche(cheminTemp, valeurTemp)); //stockage dans le set du resultat
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-			sc.close();
-			try {
-				Files.deleteIfExists(listeRes.toPath()); //Si le fichier liste_res existe, on le supprime
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return setRes;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		fonctionsJNI.rechercheImage(cheminImage);
+		Scanner sc = new Scanner(listeRes); //On lit le fichier des resultats
+		while(sc.hasNext()) { //tant qu'on a pas lu tout le fichier...
+			cheminTemp = sc.next();
+				valeurTemp = (Float) NumberFormat.getInstance().parse(sc.next()).floatValue(); //conversion en float d'un string de type xx,xx
+				setRes.add(new EntreeRecherche(cheminTemp, valeurTemp)); //stockage dans le set du resultat
 		}
-		return null;
+		sc.close();
+		return setRes;
 	}
 	
-	public Set<EntreeRecherche> rechercheTexteFichier(String cheminTexte){ //voir commentaires au dessus
+	public Set<EntreeRecherche> rechercheTexteFichier(String cheminTexte) throws FileNotFoundException, ParseException{ //voir commentaires au dessus
 		Set<EntreeRecherche> setRes = new TreeSet<>();
 		File listeRes = new File("liste_res");
 		String cheminTemp;
 		Float valeurTemp;
-		try {
-			fonctionsJNI.rechercheTexteFichier(cheminTexte);
-			Scanner sc = new Scanner(listeRes);
-			while(sc.hasNext()) {
-				cheminTemp = sc.next();
-				try {
-					valeurTemp = (Float) NumberFormat.getInstance().parse(sc.next()).floatValue();
-					setRes.add(new EntreeRecherche(cheminTemp, valeurTemp));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-			sc.close();
-			try {
-				Files.deleteIfExists(listeRes.toPath());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return setRes;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		fonctionsJNI.rechercheTexteFichier(cheminTexte);
+		Scanner sc = new Scanner(listeRes);
+		while(sc.hasNext()) {
+			cheminTemp = sc.next();
+				valeurTemp = (Float) NumberFormat.getInstance().parse(sc.next()).floatValue();
+				setRes.add(new EntreeRecherche(cheminTemp, valeurTemp));
 		}
-		return null;
+		sc.close();
+		return setRes;
 	}
 	
-	public Set<EntreeRecherche> rechercheTexteMotCle(String motCle){ //voir commentaires au dessus
+	public Set<EntreeRecherche> rechercheTexteMotCle(String motCle) throws FileNotFoundException, ParseException{ //voir commentaires au dessus
 		Set<EntreeRecherche> setRes = new TreeSet<>();
 		File listeRes = new File("liste_res");
 		String cheminTemp;
 		Float valeurTemp;
-		try {
-			fonctionsJNI.rechercheTexteMotCle(motCle);
-			Scanner sc = new Scanner(listeRes);
-			while(sc.hasNext()) {
-				cheminTemp = sc.next();
-				try {
-					valeurTemp = (Float) NumberFormat.getInstance().parse(sc.next()).floatValue();
-					setRes.add(new EntreeRecherche(cheminTemp, valeurTemp));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-			sc.close();
-			try {
-				Files.deleteIfExists(listeRes.toPath());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return setRes;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		fonctionsJNI.rechercheTexteMotCle(motCle);
+		Scanner sc = new Scanner(listeRes);
+		while(sc.hasNext()) {
+			cheminTemp = sc.next();
+			valeurTemp = (Float) NumberFormat.getInstance().parse(sc.next()).floatValue();
+			setRes.add(new EntreeRecherche(cheminTemp, valeurTemp));
 		}
-		return null;
+		sc.close();
+		return setRes;
+	}
+	
+	public Set<EntreeRecherche> rechercheImageCouleur(Integer R, Integer G, Integer B) throws FileNotFoundException, UnsupportedEncodingException, ParseException{
+		File fichierCouleur = new File("IMG_RGB/" + R + "_" + G + "_" + B +".txt");
+		if(!fichierCouleur.exists()) {
+			PrintWriter writer;
+			writer = new PrintWriter("IMG_RGB/" + R + "_" + G + "_" + B +".txt" , "UTF-8");
+			writer.print("200 200 3\n");
+			for(int i = 0; i < 200; i++) {
+				for(int j = 0; j < 200; j++) {
+					writer.print(R + " ");
+				}
+				writer.print("\n");
+			}
+			for(int i = 0; i < 200; i++) {
+				for(int j = 0; j < 200; j++) {
+					writer.print(G + " ");
+				}
+				writer.print("\n");
+			}
+			for(int i = 0; i < 200; i++) {
+				for(int j = 0; j < 200; j++) {
+					writer.print(B + " ");
+				}
+				writer.print("\n");
+			}
+			writer.close();
+			this.ajouterImage("IMG_RGB/" + R + "_" + G + "_" + B +".txt");
+			return rechercheImage("IMG_RGB/" + R + "_" + G + "_" + B +".txt");
+		}
+		else {
+			return rechercheImage("IMG_RGB/" + R + "_" + G + "_" + B +".txt");
+		}
 	}
 	
 	public void ajouterImage(String cheminImage) {

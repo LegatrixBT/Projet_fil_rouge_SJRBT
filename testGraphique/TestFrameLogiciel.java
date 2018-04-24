@@ -1,21 +1,24 @@
 package testGraphique;
 
+import model.BaseMoteur;
+import model.FactoryMoteur;
 import model.Moteur;
 import model.TypeMoteur;
-import model.UsineMoteur;
 import vuegraphique.FrameLogiciel;
 
 public class TestFrameLogiciel {
 	
-	private static UsineMoteur usineMoteur = new UsineMoteur();
-	private static Moteur moteur1 = usineMoteur.formerMoteur(TypeMoteur.MOTEUR1);
-	private static Moteur moteur2 = usineMoteur.formerMoteur(TypeMoteur.MOTEUR2);
-	//private static ThreadModeOuvert thread = new ThreadModeOuvert();
+	private static FactoryMoteur usineMoteur = new FactoryMoteur();
+	private static BaseMoteur baseMoteur = BaseMoteur.getInstance();
+	private static Moteur moteur1 = usineMoteur.creerMoteur(TypeMoteur.MOTEUR1, "Basse precision");
+	private static Moteur moteur2 = usineMoteur.creerMoteur(TypeMoteur.MOTEUR2, "Haute precision");
 	
 	
 	public static void main(String[] args) {
 		
-		//thread.start();
+		baseMoteur.ajouterMoteur(moteur1);
+		baseMoteur.ajouterMoteur(moteur2);
+		
 		moteur1.setMoteurActif();
 		moteur2.setMoteurActif();
 		moteur1.setMoteurPrincipal();

@@ -10,9 +10,9 @@ public class UsineMoteur {
 		this.factoryMoteur = new FactoryMoteur();
 	}
 	
-	public Moteur formerMoteur(TypeMoteur type) {
+	public Moteur formerMoteur(TypeMoteur type, String nom) {
 		
-		Moteur moteur = this.factoryMoteur.creerMoteur(type);
+		Moteur moteur = this.factoryMoteur.creerMoteur(type, nom);
 		BaseMoteur.getInstance().ajouterMoteur(moteur);
 		
 		return moteur;

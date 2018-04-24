@@ -54,7 +54,7 @@ public class FrameIndexation extends JFrame {
 		boxBoutons.add(verticalGlue);
 		
 		JButton btnImage = new JButton("Images");
-		btnImage.setMaximumSize(new Dimension(70,30));
+		btnImage.setMaximumSize(new Dimension(100,30));
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				controlGestionMoteurAdmin.lancerIndexationImage();
@@ -67,7 +67,7 @@ public class FrameIndexation extends JFrame {
 		boxBoutons.add(verticalGlue_1);
 		
 		JButton btnTexte = new JButton("Textes");
-		btnTexte.setMaximumSize(new Dimension(70,30));
+		btnTexte.setMaximumSize(new Dimension(100,30));
 		btnTexte.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controlGestionMoteurAdmin.lancerIndexationTexte();
@@ -80,7 +80,7 @@ public class FrameIndexation extends JFrame {
 		boxBoutons.add(verticalGlue_2);
 		
 		JButton btnSon = new JButton("Sons");
-		btnSon.setMaximumSize(new Dimension(70,30));
+		btnSon.setMaximumSize(new Dimension(100,30));
 		btnSon.setAlignmentX(Component.CENTER_ALIGNMENT);
 		boxBoutons.add(btnSon);
 		
@@ -88,7 +88,7 @@ public class FrameIndexation extends JFrame {
 		boxBoutons.add(verticalGlue_3);
 		
 		JButton btnTout = new JButton("Tout");
-		btnTout.setMaximumSize(new Dimension(70,30));
+		btnTout.setMaximumSize(new Dimension(100,30));
 		btnTout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controlGestionMoteurAdmin.lancerIndexationImage();

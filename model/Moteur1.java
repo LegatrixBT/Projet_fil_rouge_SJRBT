@@ -19,8 +19,6 @@ public class Moteur1 extends Moteur{
 		super();
 		this.setNbMotDescripteur(5);
 		this.setNnbBitIndexationImage(2);
-		this.setMoteurPrincipal();
-		this.setNom("Moteur 1");
 
 	}
 	

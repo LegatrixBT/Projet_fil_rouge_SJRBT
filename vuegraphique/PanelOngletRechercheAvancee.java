@@ -156,8 +156,10 @@ public class PanelOngletRechercheAvancee extends JPanel implements Observer{
 		btnBasculerInactif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int[] indicesMoteursSelection = listActifs.getSelectedIndices();
-				for (int i : indicesMoteursSelection) {
-					modeleMoteursActifs.get(i).unsetMoteurActif();
+				if(modeleMoteursActifs.size() > indicesMoteursSelection.length) {
+					for (int i : indicesMoteursSelection) {
+						modeleMoteursActifs.get(i).unsetMoteurActif();
+					}
 				}
 			}
 		});
