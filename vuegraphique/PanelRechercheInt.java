@@ -6,7 +6,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.Box;
@@ -23,6 +26,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import control.ControlLancerRecherche;
 import control.ControlRecherche;
 import model.EntreeRecherche;
 
@@ -46,7 +52,8 @@ public class PanelRechercheInt extends JPanel {
 	 * Create the panel.
 	 */
 	
-	private ControlRecherche controlRecherche;
+	private ControlLancerRecherche controlLancerRecherche;
+  
 	private Box boxRechercheImage;
 	private Box boxRechercheTexte;
 	private JTextField textFieldMotInclure;
@@ -60,6 +67,7 @@ public class PanelRechercheInt extends JPanel {
 	private JSlider sliderB;
 	private JLabel lblValeurRGB;
 	private JLabel lblStatusRechImageCouleur;
+
 	
 	private JFileChooser chooserTexte= new JFileChooser(System.getProperty("user.dir"));
 	private FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter("Fichiers XML (*.xml)", "xml");
@@ -139,6 +147,7 @@ public class PanelRechercheInt extends JPanel {
 		tabbedPane.addTab("Recherche par couleur", null, panelImageCouleur, null);
 		panelImageCouleur.setLayout(new BoxLayout(panelImageCouleur, BoxLayout.Y_AXIS));
 		
+
 		Box boxChoixCouleurs = Box.createHorizontalBox();
 		panelImageCouleur.add(boxChoixCouleurs);
 		
@@ -284,7 +293,7 @@ public class PanelRechercheInt extends JPanel {
 				textFieldCheminImage.setText(chosenFile.getName());
 			}
 		});
-		
+
 		Component verticalGlue_3 = Box.createVerticalGlue();
 		panelImageFichier.add(verticalGlue_3);
 		
@@ -313,7 +322,7 @@ public class PanelRechercheInt extends JPanel {
 					cheminImage = cheminImage.substring(0, cheminImage.length()-4);
 					cheminImage = cheminImage + ".txt";
 					try {
-						TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheImage(cheminImage);
+						TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImage(cheminImage);
 						if(!resRech.isEmpty()) {
 							modeleResultatsRecherche.clear();
 							for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
@@ -399,7 +408,7 @@ public class PanelRechercheInt extends JPanel {
 		
 		Component verticalGlue_5 = Box.createVerticalGlue();
 		panelTexteMotCle.add(verticalGlue_5);
-		
+
 		Box boxBtnRechTexteMotCle = Box.createHorizontalBox();
 		panelTexteMotCle.add(boxBtnRechTexteMotCle);
 		
@@ -410,7 +419,7 @@ public class PanelRechercheInt extends JPanel {
 					lblStatusRechTexteMotCle.setVisible(false);
 					modeleResultatsRecherche.clear();
 					String motCle = textFieldMotInclure.getText();
-					TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheTexteMotCle(motCle);
+					TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCle(motCle);
 					if(!resRech.isEmpty()) {
 						modeleResultatsRecherche.clear();
 						for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
@@ -426,6 +435,33 @@ public class PanelRechercheInt extends JPanel {
 					lblStatusRechTexteMotCle.setText("Erreur durant la recherche...");
 					lblStatusRechTexteMotCle.setVisible(true);
 				}
+/*
+				String motCle = textFieldMotInclure.getText();
+				TreeSet<EntreeRecherche> resRech = new TreeSet<>();
+				if (chckbxMotsAExclure.isSelected()) {// recherche complexe moteurPrincipal 
+					ControlLancerRecherche controlLancerRecherche = new ControlLancerRecherche();
+					String motAExclure = textFieldMotExclure.getText();
+					try {
+						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCleComplexe(motCle.split(" "), motAExclure.split(" "));
+					} catch (FileNotFoundException | ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				else
+				{
+				try {
+					resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheTexteMotCle(motCle);
+				} catch (FileNotFoundException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				}
+				modeleResultatsRecherche.clear();
+				for (EntreeRecherche entreeRecherche : resRech) {
+					modeleResultatsRecherche.addElement(entreeRecherche);
+				}
+				repaint();*/
 			}
 		});
 		boxBtnRechTexteMotCle.add(btnRechTexteMotCle);
@@ -471,7 +507,6 @@ public class PanelRechercheInt extends JPanel {
 		
 		Component verticalGlue_7 = Box.createVerticalGlue();
 		panelTexteFichier.add(verticalGlue_7);
-		
 		Box boxBtnRechTexteFic = Box.createHorizontalBox();
 		panelTexteFichier.add(boxBtnRechTexteFic);
 		
@@ -483,7 +518,7 @@ public class PanelRechercheInt extends JPanel {
 					modeleResultatsRecherche.clear();
 					String cheminTexte = textFieldCheminTexte.getText();
 					if(cheminTexte.contains(".xml")) {
-						TreeSet<EntreeRecherche> listeRes = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheTexteFichier(cheminTexte);
+						TreeSet<EntreeRecherche> listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteFichier(cheminTexte);
 						if(!listeRes.isEmpty()) {
 							modeleResultatsRecherche.clear();
 							for (EntreeRecherche entreeRecherche : listeRes.descendingSet()) {

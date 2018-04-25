@@ -19,6 +19,16 @@ public class FactoryMoteur { // permet de creer des moteurs
 				moteur = Moteur2.getInstance();
 				moteur.setNom(nom);
 			break;
+			
+			case MOTEUR3 :
+				moteur = Moteur3.getInstance();
+				moteur.setNom(nom);
+			break;
+			
+			default : 
+				moteur = Moteur1.getInstance();
+				moteur.setNom(nom);
+			break;
 		}
 		return moteur; 	
 	}

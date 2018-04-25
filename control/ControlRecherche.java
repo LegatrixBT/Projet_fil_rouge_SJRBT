@@ -1,7 +1,6 @@
 package control;
 
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Set;
 
@@ -21,8 +20,5 @@ public class ControlRecherche {
 	
 	public Set<EntreeRecherche> lancerRechercheImage(String cheminFichier) throws FileNotFoundException, ParseException{
 		return baseMoteur.getMoteurPrincipal().rechercheImage(cheminFichier);
-	}
-	public Set<EntreeRecherche> lancerRechercheImageCouleur(Integer R, Integer G, Integer B) throws FileNotFoundException, UnsupportedEncodingException, ParseException {
-		return baseMoteur.getMoteurPrincipal().rechercheImageCouleur(R, G, B);
-	}
+
 }

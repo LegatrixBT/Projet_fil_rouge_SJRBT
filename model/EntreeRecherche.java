@@ -10,9 +10,8 @@ public class EntreeRecherche implements Comparable<EntreeRecherche> {
 		this.distance = distance;
 	}
 	
-	@Override
-	public int compareTo(EntreeRecherche o) {
-		return this.distance.compareTo(o.distance);
+	public int hashCode() {
+		return cheminFichier.hashCode();
 	}
 	
 	public String getCheminFichier() {
@@ -26,5 +25,10 @@ public class EntreeRecherche implements Comparable<EntreeRecherche> {
 	public String toString() {
 		return cheminFichier + " - " + distance.toString() + "%";
 	}
+
+	@Override
+	public int compareTo(EntreeRecherche o) {
+		return this.cheminFichier.compareTo(o.cheminFichier);
+}
 	
 }

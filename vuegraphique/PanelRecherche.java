@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -30,6 +32,10 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+
+import control.ControlLancerRecherche;
+import model.EntreeRecherche;
+
 import javax.swing.BoxLayout;
 
 public class PanelRecherche extends JPanel {
@@ -192,7 +198,7 @@ public class PanelRecherche extends JPanel {
 	
 	btnLancerLaRecherche.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			//txtResRecTextes.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent à voir si le scroll fonctionne.\n");
+			//txtResRecTextes.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent Ã  voir si le scroll fonctionne.\n");
 		}
 	});
 	
@@ -385,7 +391,7 @@ public class PanelRecherche extends JPanel {
 	button.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			panelResRecImageCoul.setVisible(true);
-			textPaneResRecImageCoul.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent à voir si le scroll fonctionne.\n");
+			textPaneResRecImageCoul.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent Ã  voir si le scroll fonctionne.\n");
 		}
 	});
 	
