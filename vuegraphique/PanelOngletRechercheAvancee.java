@@ -148,6 +148,7 @@ public class PanelOngletRechercheAvancee extends JPanel implements Observer{
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int i = comboBoxMoteurPrincipal.getSelectedIndex();
+				controlGestionMoteurs.desactiverMoteurPrincipal();
 				modelComboBoxActifs.getElementAt(i).setMoteurPrincipal();
 			}
 		});

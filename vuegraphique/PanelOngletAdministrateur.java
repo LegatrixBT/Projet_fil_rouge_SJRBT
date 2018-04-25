@@ -423,7 +423,6 @@ public class PanelOngletAdministrateur extends JPanel implements Observer{
 			Integer[] parametres = (Integer[]) arg;
 			switch(parametres[0]) {
 				case 0:
-					controlGestionMoteurAdmin.miseAJourMoteurPrincipal();
 					lblNbBitsVal.setText(parametres[1].toString());
 					lblNbMotsDescVal.setText(parametres[2].toString());
 					break;

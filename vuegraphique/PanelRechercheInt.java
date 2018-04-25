@@ -1,45 +1,38 @@
 package vuegraphique;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import control.ControlLancerRecherche;
-import control.ControlRecherche;
 import model.EntreeRecherche;
-
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JSlider;
-import java.awt.Color;
 
 public class PanelRechercheInt extends JPanel {
 
@@ -67,6 +60,7 @@ public class PanelRechercheInt extends JPanel {
 	private JSlider sliderB;
 	private JLabel lblValeurRGB;
 	private JLabel lblStatusRechImageCouleur;
+	private JCheckBox chckBxMultiMoteur;
 
 	
 	private JFileChooser chooserTexte= new JFileChooser(System.getProperty("user.dir"));
@@ -75,7 +69,7 @@ public class PanelRechercheInt extends JPanel {
 	
 	public PanelRechercheInt() {
 		
-		controlRecherche = new ControlRecherche();
+		controlLancerRecherche = new ControlLancerRecherche();
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		ButtonGroup groupeChoixTypeRecherche = new ButtonGroup();
@@ -133,6 +127,12 @@ public class PanelRechercheInt extends JPanel {
 		
 		Component horizontalGlue_3 = Box.createHorizontalGlue();
 		boxBoutonsChoixType.add(horizontalGlue_3);
+		
+		chckBxMultiMoteur = new JCheckBox("Recherche multi-moteur");
+		boxBoutonsChoixType.add(chckBxMultiMoteur);
+		
+		Component horizontalGlue_4 = Box.createHorizontalGlue();
+		boxBoutonsChoixType.add(horizontalGlue_4);
 		
 		Box boxRecherche = Box.createVerticalBox();
 		add(boxRecherche);
@@ -242,7 +242,12 @@ public class PanelRechercheInt extends JPanel {
 				try {
 					lblStatusRechImageCouleur.setVisible(false);
 					modeleResultatsRecherche.clear();
-					TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheImageCouleur(sliderR.getValue(), sliderG.getValue(), sliderB.getValue());
+					TreeSet<EntreeRecherche> resRech;
+					if(!chckBxMultiMoteur.isSelected()) {
+						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImageCouleur(sliderR.getValue(), sliderG.getValue(), sliderB.getValue());
+					}
+					else
+						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImageCouleur(sliderR.getValue(), sliderG.getValue(), sliderB.getValue());
 					if(!resRech.isEmpty()){
 						modeleResultatsRecherche.clear();
 						for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
@@ -321,8 +326,12 @@ public class PanelRechercheInt extends JPanel {
 					lblStatusImageFichier.setVisible(false);
 					cheminImage = cheminImage.substring(0, cheminImage.length()-4);
 					cheminImage = cheminImage + ".txt";
+					TreeSet<EntreeRecherche> resRech;
 					try {
-						TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImage(cheminImage);
+						if(!chckBxMultiMoteur.isSelected())
+							resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImage(cheminImage);
+						else
+							resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheImage(cheminImage);
 						if(!resRech.isEmpty()) {
 							modeleResultatsRecherche.clear();
 							for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
@@ -418,50 +427,34 @@ public class PanelRechercheInt extends JPanel {
 				try {
 					lblStatusRechTexteMotCle.setVisible(false);
 					modeleResultatsRecherche.clear();
+					TreeSet<EntreeRecherche> resRech;
 					String motCle = textFieldMotInclure.getText();
-					TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCle(motCle);
+					String motExclus = textFieldMotExclure.getText();
+					if(!chckBxMultiMoteur.isSelected()) {
+						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCleComplexe(motCle.split(" "), motExclus.split(" "));
+					}	
+					else {
+						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCle(motCle);
+						//if(!chckbxMotsAExclure.isSelected())
+							//resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteMotCle(motCle);
+						//else
+							//resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteMotCleComplexe(motCle.split(" "), motExclus.split(" "));
+					}
 					if(!resRech.isEmpty()) {
-						modeleResultatsRecherche.clear();
-						for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
-							modeleResultatsRecherche.addElement(entreeRecherche);
+							modeleResultatsRecherche.clear();
+							for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
+								modeleResultatsRecherche.addElement(entreeRecherche);
+							}
+							repaint();
+						}else {
+							lblStatusRechTexteMotCle.setText("Pas de resultats trouves...");
+							lblStatusRechTexteMotCle.setVisible(true);
 						}
-						repaint();
-					}else {
-						lblStatusRechTexteMotCle.setText("Pas de resultats trouves...");
+					}
+					catch(Exception ex) {
+						lblStatusRechTexteMotCle.setText("Erreur durant la recherche...");
 						lblStatusRechTexteMotCle.setVisible(true);
 					}
-				}
-				catch(Exception ex) {
-					lblStatusRechTexteMotCle.setText("Erreur durant la recherche...");
-					lblStatusRechTexteMotCle.setVisible(true);
-				}
-/*
-				String motCle = textFieldMotInclure.getText();
-				TreeSet<EntreeRecherche> resRech = new TreeSet<>();
-				if (chckbxMotsAExclure.isSelected()) {// recherche complexe moteurPrincipal 
-					ControlLancerRecherche controlLancerRecherche = new ControlLancerRecherche();
-					String motAExclure = textFieldMotExclure.getText();
-					try {
-						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCleComplexe(motCle.split(" "), motAExclure.split(" "));
-					} catch (FileNotFoundException | ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				else
-				{
-				try {
-					resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheTexteMotCle(motCle);
-				} catch (FileNotFoundException | ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				}
-				modeleResultatsRecherche.clear();
-				for (EntreeRecherche entreeRecherche : resRech) {
-					modeleResultatsRecherche.addElement(entreeRecherche);
-				}
-				repaint();*/
 			}
 		});
 		boxBtnRechTexteMotCle.add(btnRechTexteMotCle);
@@ -517,8 +510,12 @@ public class PanelRechercheInt extends JPanel {
 					lblStatusRechTexteMotCle.setVisible(false);
 					modeleResultatsRecherche.clear();
 					String cheminTexte = textFieldCheminTexte.getText();
+					TreeSet<EntreeRecherche> listeRes;
 					if(cheminTexte.contains(".xml")) {
-						TreeSet<EntreeRecherche> listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteFichier(cheminTexte);
+						//if(!chckBxMultiMoteur.isSelected())
+							listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteFichier(cheminTexte);
+						//else
+							//listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteFichier(cheminTexte);
 						if(!listeRes.isEmpty()) {
 							modeleResultatsRecherche.clear();
 							for (EntreeRecherche entreeRecherche : listeRes.descendingSet()) {
@@ -558,9 +555,9 @@ public class PanelRechercheInt extends JPanel {
 					EntreeRecherche entreeChoisie = listeResultats.getSelectedValue();
 					if(entreeChoisie.getCheminFichier().contains("IMG")) {
 						try {
-							if(textFieldCheminImage.getText().contains(".jpg"))
+							if(entreeChoisie.getCheminFichier().contains("IMG_RGB"))
 								Runtime.getRuntime().exec("eog " + entreeChoisie.getCheminFichier() + ".jpg");
-							if(textFieldCheminImage.getText().contains(".bmp"))
+							if(entreeChoisie.getCheminFichier().contains("IMG_NB"))
 								Runtime.getRuntime().exec("eog " + entreeChoisie.getCheminFichier() + ".bmp");
 						} catch (IOException e1) {
 							e1.printStackTrace();

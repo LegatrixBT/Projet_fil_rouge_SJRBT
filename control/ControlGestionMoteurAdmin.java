@@ -9,18 +9,15 @@ import model.Moteur;
 
 public class ControlGestionMoteurAdmin {
 	
-	private Moteur moteurPrincipal;
 	private ControlGetMoteurPrincipal controlGetMoteurPrincipal;
 	private BaseMoteur baseMoteur = BaseMoteur.getInstance();
 	
 	public ControlGestionMoteurAdmin() {
 		controlGetMoteurPrincipal = new ControlGetMoteurPrincipal();
-		moteurPrincipal = controlGetMoteurPrincipal.getMoteurPrincipal();
 	}
 	
 	public ControlGestionMoteurAdmin(ControlGetMoteurPrincipal controlGetMoteurPrincipal) {
 		this.controlGetMoteurPrincipal = controlGetMoteurPrincipal;
-		moteurPrincipal = controlGetMoteurPrincipal.getMoteurPrincipal();
 	}
 	
 	public void initialisationLogiciel() {
@@ -29,19 +26,19 @@ public class ControlGestionMoteurAdmin {
 		File listeImg = new File("liste_base_image");
 		File listeTxt = new File("liste_base_texte");
 		if((!baseImg.isDirectory() && !baseImg.exists()) || (!listeImg.isDirectory() && !listeImg.exists())) {
-			moteurPrincipal.indexationImage();
+			baseMoteur.getMoteurPrincipal().indexationImage();
 		}
 		if((!baseTxt.isDirectory() && !baseTxt.exists()) || (!listeTxt.isDirectory() && !listeTxt.exists())) {
-			moteurPrincipal.indexationTexte();
+			baseMoteur.getMoteurPrincipal().indexationTexte();
 		}
 	}
 	
 	public void modifierNbBitsIndex(int nbBits) {
-		moteurPrincipal.setNnbBitIndexationImage(nbBits);
+		baseMoteur.getMoteurPrincipal().setNnbBitIndexationImage(nbBits);
 	}
 	
 	public void modifierNbMotsDesc(int nbMotsDesc) {
-		moteurPrincipal.setNbMotDescripteur(nbMotsDesc);
+		baseMoteur.getMoteurPrincipal().setNbMotDescripteur(nbMotsDesc);
 	}
 	
 	public void setObserver(Observer o) {
@@ -52,21 +49,17 @@ public class ControlGestionMoteurAdmin {
 	}
 	
 	public boolean lancerIndexationImage() {
-		return moteurPrincipal.indexationImage();
+		return baseMoteur.getMoteurPrincipal().indexationImage();
 	}
 	
 	public boolean lancerIndexationTexte() {
-		return moteurPrincipal.indexationTexte();
-	}
-	
-	public void miseAJourMoteurPrincipal() {
-		moteurPrincipal = controlGetMoteurPrincipal.getMoteurPrincipal();
+		return baseMoteur.getMoteurPrincipal().indexationTexte();
 	}
 	
 	public Integer[] visualiserParamIndex() {
 		Integer[] parametres = new Integer[2];		
-		parametres[0] = moteurPrincipal.getNnbBitIndexationImage();
-		parametres[1] = moteurPrincipal.getNbMotDescripteur();
+		parametres[0] = baseMoteur.getMoteurPrincipal().getNnbBitIndexationImage();
+		parametres[1] = baseMoteur.getMoteurPrincipal().getNbMotDescripteur();
 		return parametres;
 	}
 	

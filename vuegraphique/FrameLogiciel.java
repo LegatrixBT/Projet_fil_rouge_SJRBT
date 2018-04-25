@@ -40,7 +40,7 @@ public class FrameLogiciel extends JFrame implements Observer{
 	 */
 	public FrameLogiciel() {
 		setTitle("Hawk-Eye");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(System.getProperty("user.dir") + "/logo.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(System.getProperty("user.dir") + "logo.png"));
 		
 
 		controlSeConnecter = new ControlSeConnecter();

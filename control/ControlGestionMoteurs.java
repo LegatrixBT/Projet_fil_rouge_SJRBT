@@ -40,4 +40,8 @@ public class ControlGestionMoteurs {
 			moteur.addObserver(o);
 		}
 	}
+	
+	public void desactiverMoteurPrincipal() {
+		baseMoteur.getMoteurPrincipal().unsetMoteurPrincipal();
+	}
 }

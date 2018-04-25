@@ -1,6 +1,7 @@
 package control;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -21,36 +22,63 @@ public class ControlLancerRecherche{
 	List<Moteur> listeMoteurActif = controlGestionMoteurs.getListeMoteursActifs();
 
 	public Set<EntreeRecherche> lancerRechercheTexteMotCle(String motCle) throws FileNotFoundException, ParseException{
-		return baseMoteur.getMoteurPrincipal().rechercheTexteMotCle(motCle);
+		TreeSet<EntreeRecherche> resRecherche = new TreeSet<>();
+		for(EntreeRecherche entree : baseMoteur.getMoteurPrincipal().rechercheTexteMotCle(motCle)) {
+			resRecherche.add(entree);
+		}
+		return resRecherche;
 	}
 	
 	public Set<EntreeRecherche> lancerRechercheTexteFichier(String cheminFichier) throws FileNotFoundException, ParseException{
-		return baseMoteur.getMoteurPrincipal().rechercheTexteFichier(cheminFichier);
+		TreeSet<EntreeRecherche> resRecherche = new TreeSet<>(new Comparator<EntreeRecherche>() {
+
+			@Override
+			public int compare(EntreeRecherche o1, EntreeRecherche o2) {
+				return o1.getDistance().compareTo(o2.getDistance());
+			}
+		});
+		for(EntreeRecherche entree : baseMoteur.getMoteurPrincipal().rechercheTexteFichier(cheminFichier)) {
+			resRecherche.add(entree);
+		}
+		return resRecherche;
 	}
 	
 	public Set<EntreeRecherche> lancerRechercheImage(String cheminFichier) throws FileNotFoundException, ParseException{
-		return baseMoteur.getMoteurPrincipal().rechercheImage(cheminFichier);
-	}
-	public Set<EntreeRecherche> lancerRechercheImageCouleur(Integer R, Integer G, Integer B) throws FileNotFoundException, UnsupportedEncodingException, ParseException {
-		return baseMoteur.getMoteurPrincipal().rechercheImageCouleur(R, G, B);
-	}
-	
-	/*
-	public Set<EntreeRecherche> lancerRechercheTexteMot(String mot){
-		
-		Set<EntreeRecherche> resRecherche = new TreeSet<>();
-		
-		for (Moteur moteur : listeMoteurActif) {
-			resRecherche = (moteur.rechercheTexteMotCle(mot));
+		TreeSet<EntreeRecherche> resRecherche = new TreeSet<>(new Comparator<EntreeRecherche>() {
+
+			@Override
+			public int compare(EntreeRecherche o1, EntreeRecherche o2) {
+				return o1.getDistance().compareTo(o2.getDistance());
+			}
+		});
+		for(EntreeRecherche entree : baseMoteur.getMoteurPrincipal().rechercheImage(cheminFichier)) {
+			resRecherche.add(entree);
 		}
 		return resRecherche;
-				
-	}*/
+	}
+	public Set<EntreeRecherche> lancerRechercheImageCouleur(Integer R, Integer G, Integer B) throws FileNotFoundException, UnsupportedEncodingException, ParseException {
+		TreeSet<EntreeRecherche> resRecherche = new TreeSet<>(new Comparator<EntreeRecherche>() {
+
+			@Override
+			public int compare(EntreeRecherche o1, EntreeRecherche o2) {
+				return o1.getDistance().compareTo(o2.getDistance());
+			}
+		});
+		for(EntreeRecherche entree : baseMoteur.getMoteurPrincipal().rechercheImageCouleur(R, G, B)) {
+			resRecherche.add(entree);
+		}
+		return resRecherche;
+	}	
 	
-	
-	public Set<EntreeRecherche> lancerMultiRechercheTexte(String mot) throws FileNotFoundException, ParseException{
+	public Set<EntreeRecherche> lancerMultiRechercheTexteMotCle(String mot) throws FileNotFoundException, ParseException{
 		
-		Set<EntreeRecherche> resRecherche = new TreeSet<>();
+		Set<EntreeRecherche> resRecherche = new TreeSet<>(new Comparator<EntreeRecherche>() {
+
+			@Override
+			public int compare(EntreeRecherche o1, EntreeRecherche o2) {
+				return o1.getDistance().compareTo(o2.getDistance());
+			}
+		});
 		List<Set> listSetRecherche = new ArrayList<>();
 		
 		for (Moteur moteur : listeMoteurActif) {
@@ -76,9 +104,13 @@ public class ControlLancerRecherche{
 	
 	public Set<EntreeRecherche> lancerRechercheTexteMotCleComplexe(String[] motsCle, String[] motsAExclure) throws FileNotFoundException, ParseException{ // Pour le moteur principal pas de multimoteur
 		
-		Set<EntreeRecherche> resRechPositif = new TreeSet<>();
-		Set<EntreeRecherche> resRechNegatif = new TreeSet<>();
-		TreeSet<EntreeRecherche> resRechComplexe = new TreeSet<>();
+		TreeSet<EntreeRecherche> resRechComplexe = new TreeSet<>(new Comparator<EntreeRecherche>() {
+
+			@Override
+			public int compare(EntreeRecherche o1, EntreeRecherche o2) {
+				return o1.getDistance().compareTo(o2.getDistance());
+			}
+		});
 		ArrayList<Set<EntreeRecherche>> listeResMotsPos = new ArrayList<>();
 		ArrayList<Set<EntreeRecherche>> listeResMotsNeg = new ArrayList<>();
 		boolean motInclusNonTrouve = false;
@@ -113,7 +145,13 @@ public class ControlLancerRecherche{
 	
 	public Set<EntreeRecherche> lancerMultiRechercheImage(String cheminImage) throws FileNotFoundException, ParseException{
 		
-		Set<EntreeRecherche> resRecherche = new TreeSet<>();
+		Set<EntreeRecherche> resRecherche = new TreeSet<>(new Comparator<EntreeRecherche>() {
+
+			@Override
+			public int compare(EntreeRecherche o1, EntreeRecherche o2) {
+				return o1.getDistance().compareTo(o2.getDistance());
+			}
+		});
 		List<Set> listSetRecherche = new ArrayList<>();
 		
 		for (Moteur moteur : listeMoteurActif) {
