@@ -22,6 +22,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import control.ControlLancerRecherche;
@@ -34,6 +38,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JSlider;
+import java.awt.Color;
 
 public class PanelRechercheInt extends JPanel {
 
@@ -46,7 +52,8 @@ public class PanelRechercheInt extends JPanel {
 	 * Create the panel.
 	 */
 	
-	private ControlRecherche controlRecherche;
+	private ControlLancerRecherche controlLancerRecherche;
+  
 	private Box boxRechercheImage;
 	private Box boxRechercheTexte;
 	private JTextField textFieldMotInclure;
@@ -55,6 +62,12 @@ public class PanelRechercheInt extends JPanel {
 	private JList<EntreeRecherche> listeResultats;
 	private DefaultListModel<EntreeRecherche> modeleResultatsRecherche;
 	private JTextField textFieldCheminImage;
+	private JSlider sliderR;
+	private JSlider sliderG;
+	private JSlider sliderB;
+	private JLabel lblValeurRGB;
+	private JLabel lblStatusRechImageCouleur;
+
 	
 	private JFileChooser chooserTexte= new JFileChooser(System.getProperty("user.dir"));
 	private FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter("Fichiers XML (*.xml)", "xml");
@@ -66,7 +79,6 @@ public class PanelRechercheInt extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		ButtonGroup groupeChoixTypeRecherche = new ButtonGroup();
-		ButtonGroup groupeChoixCouleurs = new ButtonGroup();
 		
 		Box boxChoixTypeRecherche = Box.createVerticalBox();
 		boxChoixTypeRecherche.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -135,58 +147,118 @@ public class PanelRechercheInt extends JPanel {
 		tabbedPane.addTab("Recherche par couleur", null, panelImageCouleur, null);
 		panelImageCouleur.setLayout(new BoxLayout(panelImageCouleur, BoxLayout.Y_AXIS));
 		
-		Box boxCouleursPrimaires = Box.createHorizontalBox();
-		boxCouleursPrimaires.setAlignmentY(Component.CENTER_ALIGNMENT);
-		panelImageCouleur.add(boxCouleursPrimaires);
+
+		Box boxChoixCouleurs = Box.createHorizontalBox();
+		panelImageCouleur.add(boxChoixCouleurs);
 		
-		JRadioButton rdbtnBleu = new JRadioButton("Bleu");
-		rdbtnBleu.setSelected(true);
-		boxCouleursPrimaires.add(rdbtnBleu);
-		groupeChoixCouleurs.add(rdbtnBleu);
+		sliderR = new JSlider();
+		sliderR.setPaintTicks(true);
+		sliderG = new JSlider();
+		sliderG.setPaintTicks(true);
+		sliderB = new JSlider();
+		sliderB.setPaintTicks(true);
 		
-		JRadioButton rdbtnRouge = new JRadioButton("Rouge");
-		boxCouleursPrimaires.add(rdbtnRouge);
-		groupeChoixCouleurs.add(rdbtnRouge);
+		JPanel panelCouleur = new JPanel();
+		panelCouleur.setBackground(Color.getHSBColor(sliderR.getValue(), sliderG.getValue(), sliderB.getValue()));
+		boxChoixCouleurs.add(panelCouleur);
 		
-		JRadioButton rdbtnVert = new JRadioButton("Vert");
-		boxCouleursPrimaires.add(rdbtnVert);
-		groupeChoixCouleurs.add(rdbtnVert);
+		Box boxSliders = Box.createVerticalBox();
+		boxChoixCouleurs.add(boxSliders);
 		
-		Box boxCouleursAdditionnels = Box.createHorizontalBox();
-		boxCouleursAdditionnels.setAlignmentY(Component.CENTER_ALIGNMENT);
-		panelImageCouleur.add(boxCouleursAdditionnels);
+		Box boxSliderR = Box.createHorizontalBox();
+		boxSliders.add(boxSliderR);
 		
-		JRadioButton rdbtnJaune = new JRadioButton("Jaune");
-		boxCouleursAdditionnels.add(rdbtnJaune);
-		groupeChoixCouleurs.add(rdbtnJaune);
+		JLabel lblR = new JLabel("R :");
+		boxSliderR.add(lblR);
+		lblValeurRGB = new JLabel();
+		lblValeurRGB.setText("R = " + sliderR.getValue() + " G = " + sliderG.getValue() + " B = " + sliderB.getValue());
 		
-		JRadioButton rdbtnOrange = new JRadioButton("Orange");
-		boxCouleursAdditionnels.add(rdbtnOrange);
-		groupeChoixCouleurs.add(rdbtnOrange);
+		sliderR.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				panelCouleur.setBackground(new Color(sliderR.getValue(), sliderG.getValue(), sliderB.getValue()));
+				lblValeurRGB.setText("R = " + sliderR.getValue() + " G = " + sliderG.getValue() + " B = " + sliderB.getValue());
+			}
+		});
+		sliderR.setMaximum(255);
+		boxSliderR.add(sliderR);
 		
-		JRadioButton rdbtnMarron = new JRadioButton("Marron");
-		boxCouleursAdditionnels.add(rdbtnMarron);
-		groupeChoixCouleurs.add(rdbtnMarron);
+		Box boxSliderG = Box.createHorizontalBox();
+		boxSliders.add(boxSliderG);
 		
-		Box boxNB = Box.createHorizontalBox();
-		boxNB.setAlignmentY(Component.CENTER_ALIGNMENT);
-		panelImageCouleur.add(boxNB);
+		JLabel lblG = new JLabel("G :");
+		boxSliderG.add(lblG);
 		
-		JRadioButton rdbtnNoir = new JRadioButton("Noir");
-		boxNB.add(rdbtnNoir);
-		groupeChoixCouleurs.add(rdbtnNoir);
+		sliderG.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				panelCouleur.setBackground(new Color(sliderR.getValue(), sliderG.getValue(), sliderB.getValue()));
+				lblValeurRGB.setText("R = " + sliderR.getValue() + " G = " + sliderG.getValue() + " B = " + sliderB.getValue());
+			}
+		});
+		sliderG.setMaximum(255);
+		boxSliderG.add(sliderG);
 		
-		JRadioButton rdbtnGris = new JRadioButton("Gris");
-		boxNB.add(rdbtnGris);
-		groupeChoixCouleurs.add(rdbtnGris);
+		Box boxSliderB = Box.createHorizontalBox();
+		boxSliders.add(boxSliderB);
+		
+		JLabel lblB = new JLabel("B :");
+		boxSliderB.add(lblB);
+		
+		sliderB.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				panelCouleur.setBackground(new Color(sliderR.getValue(), sliderG.getValue(), sliderB.getValue()));
+				lblValeurRGB.setText("R = " + sliderR.getValue() + " G = " + sliderG.getValue() + " B = " + sliderB.getValue());
+			}
+		});
+		sliderB.setMaximum(255);
+		boxSliderB.add(sliderB);
+		
+		lblValeurRGB.setAlignmentX(Component.CENTER_ALIGNMENT);
+		boxSliders.add(lblValeurRGB);
+		
+		Component verticalGlue_2 = Box.createVerticalGlue();
+		panelImageCouleur.add(verticalGlue_2);
+		
+		lblStatusRechImageCouleur = new JLabel("Erreur durant la recherche...");
+		lblStatusRechImageCouleur.setVisible(false);
+		lblStatusRechImageCouleur.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelImageCouleur.add(lblStatusRechImageCouleur);
+		
+		Component verticalGlue_1 = Box.createVerticalGlue();
+		panelImageCouleur.add(verticalGlue_1);
 		
 		Box boxBtnRechImageCouleur = Box.createHorizontalBox();
-		boxBtnRechImageCouleur.setAlignmentY(Component.CENTER_ALIGNMENT);
 		panelImageCouleur.add(boxBtnRechImageCouleur);
+		boxBtnRechImageCouleur.setAlignmentY(Component.CENTER_ALIGNMENT);
 		
 		JButton btnRechImageCouleur = new JButton("Lancer la recherche");
 		btnRechImageCouleur.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					lblStatusRechImageCouleur.setVisible(false);
+					modeleResultatsRecherche.clear();
+					TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheImageCouleur(sliderR.getValue(), sliderG.getValue(), sliderB.getValue());
+					if(!resRech.isEmpty()){
+						modeleResultatsRecherche.clear();
+						for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
+							modeleResultatsRecherche.addElement(entreeRecherche);
+						}
+					}
+					else {
+						lblStatusRechImageCouleur.setText("Pas de resultats trouves...");
+						lblStatusRechImageCouleur.setVisible(true);
+					}
+					repaint();
+				}
+				catch(Exception ex) {
+					lblStatusRechImageCouleur.setText("Erreur durant la recherche...");
+					lblStatusRechImageCouleur.setVisible(true);
+				}
 			}
 		});
 		boxBtnRechImageCouleur.add(btnRechImageCouleur);
@@ -221,6 +293,17 @@ public class PanelRechercheInt extends JPanel {
 				textFieldCheminImage.setText(chosenFile.getName());
 			}
 		});
+
+		Component verticalGlue_3 = Box.createVerticalGlue();
+		panelImageFichier.add(verticalGlue_3);
+		
+		JLabel lblStatusImageFichier = new JLabel("Erreur durant la recherche...");
+		lblStatusImageFichier.setVisible(false);
+		lblStatusImageFichier.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelImageFichier.add(lblStatusImageFichier);
+		
+		Component verticalGlue_4 = Box.createVerticalGlue();
+		panelImageFichier.add(verticalGlue_4);
 		
 		Box boxBtnRechImage = Box.createHorizontalBox();
 		panelImageFichier.add(boxBtnRechImage);
@@ -233,25 +316,33 @@ public class PanelRechercheInt extends JPanel {
 		btnRechImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String cheminImage = textFieldCheminImage.getText();
+				modeleResultatsRecherche.clear();
 				if(cheminImage.contains(".jpg") || cheminImage.contains(".bmp")) {
+					lblStatusImageFichier.setVisible(false);
 					cheminImage = cheminImage.substring(0, cheminImage.length()-4);
 					cheminImage = cheminImage + ".txt";
-					
-					ControlLancerRecherche controlLancerRecherche = new ControlLancerRecherche();
-	// Multi moteur	TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheImage(cheminImage);
-					TreeSet<EntreeRecherche> resRech = new TreeSet<>();
 					try {
-						resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheImage(cheminImage);
-					} catch (FileNotFoundException | ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImage(cheminImage);
+						if(!resRech.isEmpty()) {
+							modeleResultatsRecherche.clear();
+							for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
+								modeleResultatsRecherche.addElement(entreeRecherche);
+							}
+						}
+						else {
+							lblStatusImageFichier.setText("Pas de resultats trouve...");
+							lblStatusImageFichier.setVisible(true);
+						}
+						repaint();
 					}
-					
-					modeleResultatsRecherche.clear();
-					for (EntreeRecherche entreeRecherche : resRech) {
-						modeleResultatsRecherche.addElement(entreeRecherche);
+					catch(Exception ex) {
+						lblStatusImageFichier.setText("Erreur durant la recherche...");
+						lblStatusImageFichier.setVisible(true);
 					}
-					repaint();
+				}
+				else {
+					lblStatusImageFichier.setText("Format du fichier incorrect!");
+					lblStatusImageFichier.setVisible(true);
 				}
 			}
 		});
@@ -307,12 +398,44 @@ public class PanelRechercheInt extends JPanel {
 		textFieldMotExclure.setMaximumSize(new Dimension(120, 20));
 		boxMotExclure.add(textFieldMotExclure);
 		
+		Component verticalGlue_6 = Box.createVerticalGlue();
+		panelTexteMotCle.add(verticalGlue_6);
+		
+		JLabel lblStatusRechTexteMotCle = new JLabel("Erreur durant la recherche...");
+		lblStatusRechTexteMotCle.setVisible(false);
+		lblStatusRechTexteMotCle.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelTexteMotCle.add(lblStatusRechTexteMotCle);
+		
+		Component verticalGlue_5 = Box.createVerticalGlue();
+		panelTexteMotCle.add(verticalGlue_5);
+
 		Box boxBtnRechTexteMotCle = Box.createHorizontalBox();
 		panelTexteMotCle.add(boxBtnRechTexteMotCle);
 		
 		JButton btnRechTexteMotCle = new JButton("Lancer la recherche");
 		btnRechTexteMotCle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					lblStatusRechTexteMotCle.setVisible(false);
+					modeleResultatsRecherche.clear();
+					String motCle = textFieldMotInclure.getText();
+					TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCle(motCle);
+					if(!resRech.isEmpty()) {
+						modeleResultatsRecherche.clear();
+						for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
+							modeleResultatsRecherche.addElement(entreeRecherche);
+						}
+						repaint();
+					}else {
+						lblStatusRechTexteMotCle.setText("Pas de resultats trouves...");
+						lblStatusRechTexteMotCle.setVisible(true);
+					}
+				}
+				catch(Exception ex) {
+					lblStatusRechTexteMotCle.setText("Erreur durant la recherche...");
+					lblStatusRechTexteMotCle.setVisible(true);
+				}
+/*
 				String motCle = textFieldMotInclure.getText();
 				TreeSet<EntreeRecherche> resRech = new TreeSet<>();
 				if (chckbxMotsAExclure.isSelected()) {// recherche complexe moteurPrincipal 
@@ -327,11 +450,6 @@ public class PanelRechercheInt extends JPanel {
 				}
 				else
 				{
-				////////////// Recherche multiMoteur///////////////
-				/*ControlLancerRecherche controlLancerRecherche = new ControlLancerRecherche();
-				TreeSet<EntreeRecherche> resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexte(motCle);
-				*/
-				
 				try {
 					resRech = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheTexteMotCle(motCle);
 				} catch (FileNotFoundException | ParseException e1) {
@@ -343,7 +461,7 @@ public class PanelRechercheInt extends JPanel {
 				for (EntreeRecherche entreeRecherche : resRech) {
 					modeleResultatsRecherche.addElement(entreeRecherche);
 				}
-				repaint();
+				repaint();*/
 			}
 		});
 		boxBtnRechTexteMotCle.add(btnRechTexteMotCle);
@@ -379,25 +497,47 @@ public class PanelRechercheInt extends JPanel {
 		textFieldCheminTexte.setEditable(false);
 		boxTexteChoixFichier.add(textFieldCheminTexte);
 		
+		Component verticalGlue_8 = Box.createVerticalGlue();
+		panelTexteFichier.add(verticalGlue_8);
+		
+		JLabel lblStatusTexteFichier = new JLabel("Erreur durant la recherche...");
+		lblStatusTexteFichier.setVisible(false);
+		lblStatusTexteFichier.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelTexteFichier.add(lblStatusTexteFichier);
+		
+		Component verticalGlue_7 = Box.createVerticalGlue();
+		panelTexteFichier.add(verticalGlue_7);
 		Box boxBtnRechTexteFic = Box.createHorizontalBox();
 		panelTexteFichier.add(boxBtnRechTexteFic);
 		
 		JButton btnRechTexteFic = new JButton("Lancer la recherche");
 		btnRechTexteFic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String cheminTexte = textFieldCheminTexte.getText();
-				if(cheminTexte.contains(".xml")) {	
-					TreeSet<EntreeRecherche> listeRes = new TreeSet<>();
-					try {
-						listeRes = (TreeSet<EntreeRecherche>) controlRecherche.lancerRechercheTexteFichier(cheminTexte);
-					} catch (FileNotFoundException | ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				try {
+					lblStatusRechTexteMotCle.setVisible(false);
 					modeleResultatsRecherche.clear();
-					for (EntreeRecherche entreeRecherche : listeRes) {
-						modeleResultatsRecherche.addElement(entreeRecherche);
+					String cheminTexte = textFieldCheminTexte.getText();
+					if(cheminTexte.contains(".xml")) {
+						TreeSet<EntreeRecherche> listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteFichier(cheminTexte);
+						if(!listeRes.isEmpty()) {
+							modeleResultatsRecherche.clear();
+							for (EntreeRecherche entreeRecherche : listeRes.descendingSet()) {
+								modeleResultatsRecherche.addElement(entreeRecherche);
+							}
+							repaint();
+						}else {
+							lblStatusTexteFichier.setText("Pas de resultats trouves...");
+							lblStatusTexteFichier.setVisible(true);
+						}
 					}
+					else {
+						lblStatusTexteFichier.setText("Format du fichier incorrect!");
+						lblStatusTexteFichier.setVisible(true);
+					}
+				}
+				catch(Exception ex) {
+					lblStatusTexteFichier.setText("Erreur durant la recherche...");
+					lblStatusTexteFichier.setVisible(true);
 				}
 			}
 		});
@@ -418,7 +558,10 @@ public class PanelRechercheInt extends JPanel {
 					EntreeRecherche entreeChoisie = listeResultats.getSelectedValue();
 					if(entreeChoisie.getCheminFichier().contains("IMG")) {
 						try {
-							Runtime.getRuntime().exec("eog " + entreeChoisie.getCheminFichier() + ".jpg");
+							if(textFieldCheminImage.getText().contains(".jpg"))
+								Runtime.getRuntime().exec("eog " + entreeChoisie.getCheminFichier() + ".jpg");
+							if(textFieldCheminImage.getText().contains(".bmp"))
+								Runtime.getRuntime().exec("eog " + entreeChoisie.getCheminFichier() + ".bmp");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}

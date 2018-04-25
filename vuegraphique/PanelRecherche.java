@@ -198,7 +198,7 @@ public class PanelRecherche extends JPanel {
 	
 	btnLancerLaRecherche.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			//txtResRecTextes.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent à voir si le scroll fonctionne.\n");
+			//txtResRecTextes.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent Ã  voir si le scroll fonctionne.\n");
 		}
 	});
 	
@@ -391,7 +391,7 @@ public class PanelRecherche extends JPanel {
 	button.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			panelResRecImageCoul.setVisible(true);
-			textPaneResRecImageCoul.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent à voir si le scroll fonctionne.\n");
+			textPaneResRecImageCoul.setText("Test Resultat recherche\nFiller text\n1\2\n3\n4\5\n6\n7\n8\n8bis\n9\n10\nToutes ces lignes servent Ã  voir si le scroll fonctionne.\n");
 		}
 	});
 	

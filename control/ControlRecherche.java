@@ -20,5 +20,5 @@ public class ControlRecherche {
 	
 	public Set<EntreeRecherche> lancerRechercheImage(String cheminFichier) throws FileNotFoundException, ParseException{
 		return baseMoteur.getMoteurPrincipal().rechercheImage(cheminFichier);
-	}
+
 }

@@ -29,6 +29,6 @@ public class EntreeRecherche implements Comparable<EntreeRecherche> {
 	@Override
 	public int compareTo(EntreeRecherche o) {
 		return this.cheminFichier.compareTo(o.cheminFichier);
-	}
+}
 	
 }
