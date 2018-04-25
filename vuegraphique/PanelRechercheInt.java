@@ -247,7 +247,7 @@ public class PanelRechercheInt extends JPanel {
 						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImageCouleur(sliderR.getValue(), sliderG.getValue(), sliderB.getValue());
 					}
 					else
-						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheImageCouleur(sliderR.getValue(), sliderG.getValue(), sliderB.getValue());
+						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheImageCouleur(sliderR.getValue(), sliderG.getValue(), sliderB.getValue());
 					if(!resRech.isEmpty()){
 						modeleResultatsRecherche.clear();
 						for (EntreeRecherche entreeRecherche : resRech.descendingSet()) {
@@ -434,11 +434,7 @@ public class PanelRechercheInt extends JPanel {
 						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCleComplexe(motCle.split(" "), motExclus.split(" "));
 					}	
 					else {
-						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteMotCle(motCle);
-						//if(!chckbxMotsAExclure.isSelected())
-							//resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteMotCle(motCle);
-						//else
-							//resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteMotCleComplexe(motCle.split(" "), motExclus.split(" "));
+						resRech = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteMotCleComplexe(motCle.split(" "), motExclus.split(" "));
 					}
 					if(!resRech.isEmpty()) {
 							modeleResultatsRecherche.clear();
@@ -512,10 +508,10 @@ public class PanelRechercheInt extends JPanel {
 					String cheminTexte = textFieldCheminTexte.getText();
 					TreeSet<EntreeRecherche> listeRes;
 					if(cheminTexte.contains(".xml")) {
-						//if(!chckBxMultiMoteur.isSelected())
+						if(!chckBxMultiMoteur.isSelected())
 							listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerRechercheTexteFichier(cheminTexte);
-						//else
-							//listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteFichier(cheminTexte);
+						else
+							listeRes = (TreeSet<EntreeRecherche>) controlLancerRecherche.lancerMultiRechercheTexteFichier(cheminTexte);
 						if(!listeRes.isEmpty()) {
 							modeleResultatsRecherche.clear();
 							for (EntreeRecherche entreeRecherche : listeRes.descendingSet()) {

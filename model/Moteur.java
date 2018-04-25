@@ -141,6 +141,7 @@ public abstract class Moteur extends Observable{
 				setRes.add(new EntreeRecherche(cheminTemp, valeurTemp)); //stockage dans le set du resultat
 		}
 		sc.close();
+		listeRes.delete();
 		return setRes;
 	}
 	
@@ -157,6 +158,7 @@ public abstract class Moteur extends Observable{
 				setRes.add(new EntreeRecherche(cheminTemp, valeurTemp));
 		}
 		sc.close();
+		listeRes.delete();
 		return setRes;
 	}
 	
@@ -173,6 +175,7 @@ public abstract class Moteur extends Observable{
 			setRes.add(new EntreeRecherche(cheminTemp, valeurTemp));
 		}
 		sc.close();
+		listeRes.delete();
 		return setRes;
 	}
 	
